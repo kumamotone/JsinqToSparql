@@ -1,1 +1,35 @@
-JsinqToSparql you may have to write npm install lodash --save
+JsinqToSparql 
+
+====
+
+A Jsinq provider to SPARQL.
+
+## Description
+
+I added submodule node-sparql-client by:
+
+git submodule add git://github.com/thomasfr/node-sparql-client.git node-sparql-client
+
+I installed lodash by:
+
+npm install lodash --save
+
+
+## Demo
+
+## VS. 
+
+## Requirement
+
+## Usage
+
+## Install
+
+## Contribution
+
+## Licence
+
+## Author
+
+Kazumasa Kumamoto
+
