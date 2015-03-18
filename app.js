@@ -13,12 +13,9 @@ var lab_viewquery = ("prefix Prof: <http://prof.test/> " +
     "where " +
     "{ ?ID Lab:Name ?Name }");
 
-
-// jsinq を使用する
-// https://jsinq.codeplex.com/
-var fs = require('fs')
-eval(fs.readFileSync('./jsinq.js')+'');
-eval(fs.readFileSync('./jsinq-query.js')+'');
+// jsinq をロード
+require('./jsinq');
+require('./jsinq-query');
 
 // デバッグコード
 console.log("View Query1: " + prof_viewquery );
@@ -39,7 +36,12 @@ console.log("LINQ Query:" + querystr);
 
 var query = new jsinq.Query(querystr);
 
-query.executeQuery(query, prof_viewquery, lab_viewquery);
+query.executeQuery(query, [prof_viewquery, lab_viewquery],
+    function (values) {
+        for (var key in values) {
+            console.log(key + ': ' + values[key]);
+        }
+    });
 
 // console.log(query.getQueryFunction().toString());
 

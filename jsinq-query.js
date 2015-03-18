@@ -1727,10 +1727,19 @@
       var y = compileQuery(x);
       queryFunction = new Function('_$qp', 
           y);
-      x.parsed.forEach(function(r){
-        // console.log(r);
-      });
 
+      // x.parsed.forEach(function(r){
+      //   console.log(r);
+      // });
+
+      // select文でとってくるカラムの名前をおぼえる
+      for (var i = 0; i < x.parsed.length; i++) {
+          if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
+          var selectStr = x.parsed[i][1][1].replace(/\s*/g, '');
+          var selects = selectStr.match(/return\[(.*)\]/);
+          if (!selects) { continue; }
+          this.selectKeys = selects[1].split(/,/);
+      }
 
     } catch (e) {			
       if (e instanceof ParseError) {
@@ -1777,7 +1786,7 @@
       return queryFunction;
     };
 
-    this.executeQuery = function(query, viewdef1, viewdef2) {
+    this.executeQuery = function(query, viewdefs, callback) {
       // node-sparql-client を使用する
       var SparqlClient = require('./node-sparql-client/');
 
@@ -1791,55 +1800,46 @@
 
       console.log("Query to " + endpoint);
 
-      // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
+      var _this = this;
+      var count = 0;
+      var _setValue = function (index, viewdef) {
+          // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
 
-      // todo sparql クライアントに一斉に投げる（非同期処理)
-      // クエリ実行
-      // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
-      // arg0 ... error 用変数
-      // arg1 ... 実行結果
-      sparqlClient.query(viewdef1).execute(function(error, ret) {
-        var profs = [];
-        ret.results.bindings.forEach(function(r) {
-          var s = {};
-          for (var k in r) {
-            s[k] = r[k].value;
-          }
-          profs.push(s);
-        });
-        profs = new jsinq.Enumerable(profs);
-        query.setValue(0, profs);
+          // todo sparql クライアントに一斉に投げる（非同期処理)
+          // クエリ実行
+          // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
+          // arg0 ... error 用変数
+          // arg1 ... 実行結果
+          sparqlClient.query(viewdef).execute(function(error, ret) {
+              var bindings = ret.results.bindings;
+              var values = bindings.map(function(binding) {
+                  var s = {};
+                  for (var k in binding) {
+                      s[k] = binding[k].value;
+                  }
+                  return s;
+              });
+              query.setValue(index, new jsinq.Enumerable(values));
 
-        // todo if viewdef2 != null
-        sparqlClient.query(viewdef2).execute(function(error2, ret2) {
-          var labs = [];
-          ret2.results.bindings.forEach(function(r) {
-            var s = {} ; 
-            for (var k in r) {
-              s[k] = r[k].value;
-            }
-            labs.push(s);
+              count++;
+              if (count == viewdefs.length) {
+                  var result = query.execute();
+                  var enumerator = result.getEnumerator();
+                  while (enumerator.moveNext()) {
+                      var name = enumerator.current();
+                      var valuesObj = {};
+                      name.forEach(function (v, i) {
+                          valuesObj[_this.selectKeys[i]] = v;
+                      });
+                      callback(valuesObj);
+                  }
+              }
           });
-          labs = new jsinq.Enumerable(labs);
-          query.setValue(1, labs);
+      } 
 
-          var result = query.execute();
-          var enumerator = result.getEnumerator();
-          while (enumerator.moveNext()) {
-            var name = enumerator.current();
-            console.log('name: ' + name);
-          }
-        });
-      });
-     
-       /* while (!isended) {
-        var d1 = new date().gettime();
-        var d2 = new date().gettime();
-        while(d2 < d1+1) {
-          d2 = new Date().getTime();
-          //console.log('wating');
-        }
-      }*/
+      viewdefs.forEach(function (viewdef, index) {
+          _setValue(index, viewdef);
+      });     
     };
   }
   this.QueryTranslationException = QueryTranslationException;
