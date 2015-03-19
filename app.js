@@ -1,18 +1,3 @@
-// ビュー定義
-var prof_viewquery = ("prefix Prof: <http://prof.test/> " +
-   "prefix Lab: <http://lab.test/>  " + 
-        "select * " +
-        "where " +
-        "{ ?profID Prof:Name ?Name ." +
-        "?profID Lab:ID ?labID . }");
-
-// ビュー定義
-var lab_viewquery = ("prefix Prof: <http://prof.test/> " +
-    "prefix Lab: <http://lab.test/>  " + 
-    "select * " +
-    "where " +
-    "{ ?ID Lab:Name ?Name }");
-
 // jsinq をロード
 require('./jsinq');
 require('./jsinq-query');
