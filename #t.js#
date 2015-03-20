@@ -1,2 +1,0 @@
-
-Kitten.find({ name: /^Fluff/ }, callback)
