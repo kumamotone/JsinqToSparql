@@ -1825,7 +1825,9 @@
               if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
+                  console.log(enumerator);
                   while (enumerator.moveNext()) {
+                      console.log("kokoko");
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
@@ -1837,9 +1839,9 @@
           });
       } 
 
-      docs.forEach(function (doc, index) {
-          _setValue(index, doc.sparql, doc.endpoint);
-      });     
+      for(var i = 0; i < docs.length; i++) {
+          _setValue(i, docs[i].sparql, docs[i].endpoint);
+      }
     };
   }
   this.QueryTranslationException = QueryTranslationException;

@@ -19,11 +19,13 @@ db.once('open', function () {
   // LINQコード
   var querystr = ' \
   from prof in $0 \
-  join paper in $1 on prof.paperID equals paper.paperID \
-  select [prof.profID]  \
-  '; 
+  join lab in $1 \
+  on prof.labID equals lab.ID \
+  where lab.Name == "KDE" \
+  select [prof.profID, prof.Name, lab.Name]  \
+  ';
 
-  ViewDef.find({$or : [{viewname: "Prof"}, {viewname: "Paper"}]}, function(err, docs) {
+    ViewDef.find({$or : [{viewname: "Prof"}, {viewname: "Lab"}]}, function(err, docs) {
 
     console.log("LINQ Query:" + querystr);
     var query = new jsinq.Query(querystr);
