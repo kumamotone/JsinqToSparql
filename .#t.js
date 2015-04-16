@@ -1,1 +1,0 @@
-kumamoto@kumamoto-virtual-machine.58865:1408294005
