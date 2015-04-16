@@ -30,7 +30,18 @@ db.once('open', function () {
         });
     });
 
-    Promise.all([p, l]).then(function(res){
+    var pp = new Promise(function(resolve, reject){
+        ViewDefRegister.load('./viewdefs/paper.json').then(function(row){
+            row.save(function(err, row){
+                if (err) reject(err);
+                resolve(row);
+            });
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+    
+    Promise.all([p, l ,pp]).then(function(res){
         console.log('saved!');
         console.log(JSON.stringify(res));
     }).catch(function(err){

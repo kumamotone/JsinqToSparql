@@ -19,29 +19,24 @@ db.once('open', function () {
   // LINQコード
   var querystr = ' \
   from prof in $0 \
-  join lab in $1 \
-  on prof.labID equals lab.ID \
-  where lab.Name == "KDE" \
-  select [prof.profID, prof.Name, lab.Name]  \
+  join paper in $1 on prof.paperID equals paper.paperID \
+  select [prof.profID, prof.Name, paper.paperTitle]  \
   ';
 
-  ViewDef.find({}, function(err, docs) {
+  ViewDef.find({$or : [{viewname: "Prof"},{viewname: "Paper"}]}, function(err, docs) {
     // expectedresult = ' <http://profs.test/p1> Kitagawa KDE . <http://profs.test/p2> Amagasa KDE ';
 
     console.log("LINQ Query:" + querystr);
-
     var query = new jsinq.Query(querystr);
-
-    console.log("docs!!!!!!!!!!!!");
-    console.log(JSON.stringify(docs));
 
     query.executeQuery(query, docs,
     function (values) {
+      console.log("Results:");
       for (var key in values) {
         console.log(key + ': ' + values[key]);
       }
     });
-
+  db.close();
   // console.log(query.getQueryFunction().toString());
   });
 });

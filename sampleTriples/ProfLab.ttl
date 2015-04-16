@@ -1,0 +1,21 @@
+@prefix Prof: <http://prof.test/> .
+@prefix Lab: <http://lab.test/> .
+
+Prof:p1
+  Prof:ID Prof:p1; 
+  Prof:Name "Kitagawa"; 
+  Lab:ID  Lab:l1 .
+Prof:p2
+  Prof:ID Prof:p2;
+  Prof:Name "Amagasa";
+  Lab:ID  Lab:l1 .
+Prof:p3
+  Prof:ID Prof:p3;
+  Prof:Name "Morishima";
+  Lab:ID  Lab:l2 .
+Lab:l1
+  Lab:ID Lab:l1;
+  Lab:Name  "KDE" .
+Lab:l2
+  Lab:ID  Lab:l2;
+  Lab:Name  "mlab" .

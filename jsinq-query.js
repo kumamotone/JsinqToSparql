@@ -1816,6 +1816,7 @@
                   for (var k in binding) {
                       s[k] = binding[k].value;
                   }
+                  console.log(JSON.stringify(s));
                   return s;
               });
               query.setValue(index, new jsinq.Enumerable(values));

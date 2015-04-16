@@ -1,18 +1,27 @@
 @prefix Prof: <http://prof.test/>
 @prefix Lab: <http://lab.test/>
+@prefix Paper: <http://paper.test/>
 
-Prof:1
-  Prof:Name "Prof. K.";
-  Lab:labID Lab:1 .
-Prof:2
-  Prof:Name "Prof. A.";
-  Lab:labID  Lab:1 .
-Prof:3
-  Prof:Name "Prof. M.";
-  Lab:labID  Lab:2 .
+Prof:p1
+  Prof:ID Prof:p1; 
+  Prof:Name "ProfK" ;
+  Lab:labID Lab:l1 ; 
+  Prof:Wrote Paper:pp1 .
+Prof:p2
+  Prof:ID Prof:p2;
+  Prof:Name "ProfA" ;
+  Lab:labID  Lab:l1 ;
+  Prof:Wrote  <http://paper.test/pp2> .
+Prof:p3
+  Prof:ID Prof:p3;
+  Prof:Name "ProfM" ;
+  Lab:labID  Lab:l2 ;
+  Prof:Wrote  <http://paper.test/pp3> .
 
-Lab:1
+Lab:l1
+  Lab:ID Lab:l1;
   Lab:Name  "KDE" .
-Lab:2
+Lab:l2
+  Lab:ID  Lab:l2;
   Lab:Name  "mlab" .
 

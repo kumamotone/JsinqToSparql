@@ -1,6 +1,6 @@
 {
-  "viewname" : "Prof",
-  "sparql": "prefix Prof: <http://prof.test/> prefix Lab: <http://lab.test/> select * where { ?profID Prof:Name ?Name . ?profID Lab:labID ?labID . ?profID Prof:Wrote ?paperID }",
+  "viewname" : "Paper",
+  "sparql": "prefix dc: <http://purl.org/dc/elements/1.1/> select * from <http://paper.test/> where { ?paperID dc:title ?paperTitle }",
   "jsonschema": { "type":"object", "properties":{
     "results": {
     "type":"array", "items":{

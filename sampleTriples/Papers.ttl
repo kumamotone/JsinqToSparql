@@ -1,0 +1,9 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> 
+@prefix Paper: <http://paper.test/>
+
+Paper:pp1
+  dc:title  "title 1" .
+Paper:pp2
+  dc:title  "title 2" .
+Paper:pp3
+  dc:title  "title 3" .
