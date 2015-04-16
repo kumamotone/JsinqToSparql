@@ -1,6 +1,6 @@
 {
   "viewname" : "Paper",
-  "sparql": "prefix dc: <http://purl.org/dc/elements/1.1/> select * from <http://paper.test/> where { ?paperID dc:title ?paperTitle }",
+  "sparql": "prefix dc: <http://purl.org/dc/elements/1.1/> select * from <http://paper.test/> where { ?ID dc:title ?title }",
   "jsonschema": { "type":"object", "properties":{
     "results": {
     "type":"array", "items":{

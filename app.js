@@ -20,11 +20,10 @@ db.once('open', function () {
   var querystr = ' \
   from prof in $0 \
   join paper in $1 on prof.paperID equals paper.paperID \
-  select [prof.profID, prof.Name, paper.paperTitle]  \
-  ';
+  select [prof.profID]  \
+  '; 
 
-  ViewDef.find({$or : [{viewname: "Prof"},{viewname: "Paper"}]}, function(err, docs) {
-    // expectedresult = ' <http://profs.test/p1> Kitagawa KDE . <http://profs.test/p2> Amagasa KDE ';
+  ViewDef.find({$or : [{viewname: "Prof"}, {viewname: "Paper"}]}, function(err, docs) {
 
     console.log("LINQ Query:" + querystr);
     var query = new jsinq.Query(querystr);

@@ -2,8 +2,8 @@
 @prefix Paper: <http://paper.test/>
 
 Paper:pp1
-  dc:title  "title 1" .
+  dc:title  "title1" .
 Paper:pp2
-  dc:title  "title 2" .
+  dc:title  "title2" .
 Paper:pp3
-  dc:title  "title 3" .
+  dc:title  "title3" .
