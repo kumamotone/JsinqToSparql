@@ -3,8 +3,6 @@ require('./jsinq');
 require('./jsinq-query');
 
 // デバッグコード
-console.log("View Query1: " + prof_viewquery );
-console.log("View Query2: " + lab_viewquery );
 
 // LINQコード
 var querystr = ' \
