@@ -1786,23 +1786,22 @@
       return queryFunction;
     };
 
-    this.executeQuery = function(query, viewdefs, callback) {
+    this.executeQuery = function(query, docs, callback) {
       // node-sparql-client を使用する
       var SparqlClient = require('./node-sparql-client/');
 
-      // SPARQL エンドポイントのアドレス 
-      var endpoint = 'http://127.0.0.1:8890/sparql/';
-      var sparqlClient = new SparqlClient(endpoint);
-
-      // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
-      // とかやるときに必要
-      var util = require('util');
-
-      console.log("Query to " + endpoint);
-
       var _this = this;
       var count = 0;
-      var _setValue = function (index, viewdef) {
+      var _setValue = function (index, viewdef, endpoint) {
+          // SPARQL エンドポイントのアドレス 
+          var sparqlClient = new SparqlClient(endpoint);
+
+          // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
+          // とかやるときに必要
+          // var util = require('util');
+
+          console.log("Query to: " + endpoint);
+          console.log("ViewQuery : " + viewdef);
           // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
 
           // todo sparql クライアントに一斉に投げる（非同期処理)
@@ -1822,7 +1821,7 @@
               query.setValue(index, new jsinq.Enumerable(values));
 
               count++;
-              if (count == viewdefs.length) {
+              if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
                   while (enumerator.moveNext()) {
@@ -1837,8 +1836,8 @@
           });
       } 
 
-      viewdefs.forEach(function (viewdef, index) {
-          _setValue(index, viewdef);
+      docs.forEach(function (doc, index) {
+          _setValue(index, doc.sparql, doc.endpoint);
       });     
     };
   }

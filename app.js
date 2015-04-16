@@ -1,32 +1,48 @@
 // jsinq をロード
 require('./jsinq');
 require('./jsinq-query');
-
+var mongoose = require('mongoose');
 // デバッグコード
 
- 
+var ViewDef = mongoose.model('viewdef', { 
+  viewname: String,
+    sparql: String,
+    jsonschema: Object,
+    endpoint: String
+});
 
-// LINQコード
-var querystr = ' \
-               from prof in $0 \
-               join lab in $1 \
-               on prof.labID equals lab.ID \
-               where lab.Name == "KDE" \
-               select [prof.profID, prof.Name, lab.Name]  \
-               ';
+mongoose.connect('mongodb://localhost/');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
 
-// expectedresult = ' <http://profs.test/p1> Kitagawa KDE . <http://profs.test/p2> Amagasa KDE ';
+  // LINQコード
+  var querystr = ' \
+  from prof in $0 \
+  join lab in $1 \
+  on prof.labID equals lab.ID \
+  where lab.Name == "KDE" \
+  select [prof.profID, prof.Name, lab.Name]  \
+  ';
 
-console.log("LINQ Query:" + querystr);
+  ViewDef.find({}, function(err, docs) {
+    // expectedresult = ' <http://profs.test/p1> Kitagawa KDE . <http://profs.test/p2> Amagasa KDE ';
 
-var query = new jsinq.Query(querystr);
+    console.log("LINQ Query:" + querystr);
 
-query.executeQuery(query, [prof_viewquery, lab_viewquery],
+    var query = new jsinq.Query(querystr);
+
+    console.log("docs!!!!!!!!!!!!");
+    console.log(JSON.stringify(docs));
+
+    query.executeQuery(query, docs,
     function (values) {
-        for (var key in values) {
-            console.log(key + ': ' + values[key]);
-        }
+      for (var key in values) {
+        console.log(key + ': ' + values[key]);
+      }
     });
 
-// console.log(query.getQueryFunction().toString());
+  // console.log(query.getQueryFunction().toString());
+  });
+});
 

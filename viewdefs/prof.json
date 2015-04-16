@@ -7,5 +7,5 @@
     "type":"object", "properties":{
     "?label": { "type":"string" },
     "?value": { "type":"string" } }}}}},
-  "endpoint": "http://127.0.0.1:5000/sparql"
+  "endpoint": "http://127.0.0.1:8890/sparql"
 }
