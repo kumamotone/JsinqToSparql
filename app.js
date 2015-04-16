@@ -4,6 +4,8 @@ require('./jsinq-query');
 
 // デバッグコード
 
+ 
+
 // LINQコード
 var querystr = ' \
                from prof in $0 \

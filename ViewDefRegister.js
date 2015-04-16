@@ -1,13 +1,12 @@
 var Promise = require('promise');
 var mongoose = require('mongoose');
-var ViewQuery = mongoose.model('ViewQuery', { 
+var ViewDef = mongoose.model('viewdef', { 
     viewname: String,
     sparql: String,
     jsonschema: Object,
     endpoint: String
 });
 var fs = require('fs');
-
 
 var load = function(filepath, callback){
     return new Promise(function(resolve,reject){
@@ -18,14 +17,15 @@ var load = function(filepath, callback){
             // そうでなければ新規にinsert
             var row = JSON.parse(data);
 
-            ViewQuery.findOneAndRemove({ viewname: row.viewname }, function(err, doc){
+            ViewDef.findOneAndRemove({ viewname: row.viewname }, function(err, doc){
                 if (err) { return reject(err); }
                 if (doc) {
-                    var d = new ViewQuery(doc);
+                    var d = new ViewDef(doc);
                     resolve(d);
                 }
                 else {
-                    resolve(new ViewQuery(row));
+                    resolve(new ViewDef(row));
+                    console.log("resolved");
                 }
             });
         });        
