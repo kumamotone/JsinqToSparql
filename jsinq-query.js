@@ -1816,22 +1816,22 @@
                   for (var k in binding) {
                       s[k] = binding[k].value;
                   }
-                  // console.log(JSON.stringify(s));
+                  /// console.log(JSON.stringify(s));
                   return s;
               });
               query.setValue(index, new jsinq.Enumerable(values));
-              console.log(index.toString());console.log(values);
+              /// console.log(index.toString());console.log(values);
               
               count++;
               if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
-                  console.log(enumerator);
+                  /// console.log(enumerator);
                   while (enumerator.moveNext()) {
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
-                          console.log("--------------------------------->"); 
+                          /// console.log("--------------------------------->"); 
                           valuesObj[_this.selectKeys[i]] = v;
                       });
                       callback(valuesObj);

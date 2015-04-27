@@ -461,19 +461,19 @@
 								var secondEnumerator = second.getEnumerator();
 								while (secondEnumerator.moveNext()) {
 									var current = secondEnumerator.current();
-                  console.log("current------------------------->>>>>>>>");
-                  console.log(current);
-                  console.log(innerKeySelector.toString());
+                  /// console.log("current------------------------->>>>>>>>");
+                  /// console.log(current);
+                  /// console.log(innerKeySelector.toString());
 									var key = innerKeySelector(current);
-                  console.log("waooooooooooooooooooooooooooooooooooooooo");
-                  console.log(key);
-                  if (!key) break;
+                  /// console.log("waooooooooooooooooooooooooooooooooooooooo");
+                  /// console.log(key);
+                  /// if (!key) break;
 									if (!dictionary.tryAdd(key, [current])) {
 										var array = dictionary.item(key);
 										array.push(current);
 									}
 								}
-                console.log("exit");
+                /// console.log("exit");
 							}
 							
 							this.moveNext = function() {
@@ -519,8 +519,8 @@
 										}
 									}
 								}
-                      console.log("outerrrrrrrrrrrrrrrrrrrrr");
-                      console.log(current);
+                /// console.log("outerrrrrrrrrrrrrrrrrrrrr");
+                /// console.log(current);
 
 								return hasNext;
 							};
