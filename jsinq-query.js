@@ -1820,11 +1820,13 @@
                   return s;
               });
               query.setValue(index, new jsinq.Enumerable(values));
-
+              console.log(index.toString());console.log(values);
+              
               count++;
               if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
+                  console.log(enumerator);
                   while (enumerator.moveNext()) {
                       var name = enumerator.current();
                       var valuesObj = {};
@@ -1839,7 +1841,14 @@
       } 
 
       for(var i = 0; i < docs.length; i++) {
-          _setValue(i, docs[i].sparql, docs[i].endpoint);
+          if(docs[i].viewname == "Prof") {
+            hoge = 0;
+          } else if (docs[i].viewname == "Lab"){
+            hoge = 1;
+          } else if (docs[i].viewname == "Paper"){
+            hoge = 2;
+          }
+          _setValue(hoge, docs[i].sparql, docs[i].endpoint);
       }
     };
   }

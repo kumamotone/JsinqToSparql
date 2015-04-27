@@ -28,7 +28,7 @@ db.once('open', function () {
   ';
 
     ViewDef.find({$or : [{viewname: "Prof"}, {viewname: "Lab"}, {viewname: "Paper"}]}, function(err, docs) {
-
+    console.log(docs);
     console.log("LINQ Query:" + querystr);
     var query = new jsinq.Query(querystr);
 
