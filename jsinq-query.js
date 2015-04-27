@@ -1816,7 +1816,7 @@
                   for (var k in binding) {
                       s[k] = binding[k].value;
                   }
-                  console.log(JSON.stringify(s));
+                  // console.log(JSON.stringify(s));
                   return s;
               });
               query.setValue(index, new jsinq.Enumerable(values));
@@ -1825,12 +1825,11 @@
               if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
-                  console.log(enumerator);
                   while (enumerator.moveNext()) {
-                      console.log("kokoko");
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
+                          console.log("--------------------------------->"); 
                           valuesObj[_this.selectKeys[i]] = v;
                       });
                       callback(valuesObj);

@@ -461,12 +461,19 @@
 								var secondEnumerator = second.getEnumerator();
 								while (secondEnumerator.moveNext()) {
 									var current = secondEnumerator.current();
+                  console.log("current------------------------->>>>>>>>");
+                  console.log(current);
+                  console.log(innerKeySelector.toString());
 									var key = innerKeySelector(current);
+                  console.log("waooooooooooooooooooooooooooooooooooooooo");
+                  console.log(key);
+                  if (!key) break;
 									if (!dictionary.tryAdd(key, [current])) {
 										var array = dictionary.item(key);
 										array.push(current);
 									}
 								}
+                console.log("exit");
 							}
 							
 							this.moveNext = function() {
@@ -512,6 +519,9 @@
 										}
 									}
 								}
+                      console.log("outerrrrrrrrrrrrrrrrrrrrr");
+                      console.log(current);
+
 								return hasNext;
 							};
 							
@@ -1018,7 +1028,6 @@
 			 *             resultSelector, comparer)
 			 */		
 			groupJoin: join(true),
-			
 			/**
 			 * Returns a new Enumerable that is the result of the intersection
 			 * of two Enumerables. Optionally uses the specified comparer.
@@ -1069,8 +1078,7 @@
 				var isEmpty = true;
 				this.any(function(item) {
 					if (!hasPredicate || predicate(item)) {
-						last = item;
-						isEmpty = false;
+						last = item; isEmpty = false;
 					}
 					return false;	
 				});					
@@ -1792,6 +1800,7 @@
 		var defaultObjectString = {}.toString();
 
 		function hashComplexKey(key) {
+      console.log(key);
 			if (comparer != null) {
 				return 0;
 			}
