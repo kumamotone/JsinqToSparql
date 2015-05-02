@@ -1,0 +1,11 @@
+{
+  "viewname" : "person",
+  "sparql": "PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT * WHERE { ?person foaf:name ?name } ", 
+  "jsonschema": { "type":"object", "properties":{
+    "results": {
+    "type":"array", "items":{
+    "type":"object", "properties":{
+    "?label": { "type":"string" },
+    "?value": { "type":"string" } }}}}},
+  "endpoint": "http://130.158.76.22:8890/sparql"
+}

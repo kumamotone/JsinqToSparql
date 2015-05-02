@@ -1,0 +1,11 @@
+{
+  "viewname" : "inproc",
+  "sparql": "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX bench: <http://localhost/vocabulary/bench/> SELECT * WHERE { ?inproc rdf:type bench:Inproceedings . ?inproc dc:creator ?person .} ",
+  "jsonschema": { "type":"object", "properties":{
+    "results": {
+    "type":"array", "items":{
+    "type":"object", "properties":{
+    "?label": { "type":"string" },
+    "?value": { "type":"string" } }}}}},
+  "endpoint": "http://130.158.76.22:8890/sparql"
+}
