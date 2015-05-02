@@ -1,0 +1,11 @@
+{
+  "viewname" : "Feature",
+  "sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> SELECT * WHERE { ?prdctft rdfs:label ?ftlbl . ?prdctft rdfs:comment ?ftct } ",
+  "jsonschema": { "type":"object", "properties":{
+    "results": {
+    "type":"array", "items":{
+    "type":"object", "properties":{
+    "?label": { "type":"string" },
+    "?value": { "type":"string" } }}}}},
+  "endpoint": "http://130.158.76.22:8890/sparql"
+}
