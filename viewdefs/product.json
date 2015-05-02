@@ -1,6 +1,6 @@
 {
   "viewname" : "Product",
-  "sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> SELECT * WHERE { ?prdct rdf:type bsbm:Product . ?prdct rdfs:label ?prdctlb . ?prdct bsbm:productFeature ?prdctft  } ",
+  "sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> SELECT * WHERE { ?prdct rdf:type bsbm:Product . ?prdct rdfs:label ?prdctlbl . ?prdct bsbm:productFeature ?prdctft  } ",
   "jsonschema": { "type":"object", "properties":{
     "results": {
     "type":"array", "items":{

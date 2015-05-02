@@ -18,10 +18,10 @@ db.once('open', function () {
 
   // LINQコード
   var querystr = ' \
-  from p in $0 \
-  join f in $1  \
-  on p.prdctFt equals f.ft \
-  select [p.prdctlbl, f.ftlbl]  \
+  from product in $0 \
+  join feature in $1  \
+  on product.prdctft equals feature.ft \
+  select [product.prdctlbl, feature.ftct]  \
   ';
 
     ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {

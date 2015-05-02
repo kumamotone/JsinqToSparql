@@ -1728,17 +1728,21 @@
       queryFunction = new Function('_$qp', 
           y);
 
-      // x.parsed.forEach(function(r){
-      //   console.log(r);
-      // });
+      console.log("pasudo!!!");
+       x.parsed.forEach(function(r){
+         console.log(r);
+       });
 
       // select•¶‚Å‚Æ‚Á‚Ä‚­‚éƒJƒ‰ƒ€‚Ì–¼‘O‚ğ‚¨‚Ú‚¦‚é
+      
       for (var i = 0; i < x.parsed.length; i++) {
           if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
           var selectStr = x.parsed[i][1][1].replace(/\s*/g, '');
           var selects = selectStr.match(/return\[(.*)\]/);
           if (!selects) { continue; }
           this.selectKeys = selects[1].split(/,/);
+          console.log("---selectKeys--------");
+          console.log(this.selectKeys);
       }
 
     } catch (e) {			
@@ -1831,8 +1835,11 @@
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
-                          /// console.log("--------------------------------->"); 
-                          valuesObj[_this.selectKeys[i]] = v;
+                          console.log("--------------------------------->"); 
+                          /// console.log(valuesObj);
+                          // ‚±‚Ì‰º‚Ìˆês‚ª‚È‚¢‚Æ“®‚«‚Ü‚¹‚ñ
+                          // valuesObj[_this.selectKeys[i]] = v;
+                          // console.log(v);
                       });
                       callback(valuesObj);
                   }
