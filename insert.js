@@ -10,7 +10,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
 
     var p = new Promise(function(resolve, reject){
-        ViewDefRegister.load('./viewdefs/prof.json').then(function(row){
+        ViewDefRegister.load('./viewdefs/product.json').then(function(row){
             row.save(function(err, row){
                 if (err) reject(err);
                 resolve(row);
@@ -20,18 +20,7 @@ db.once('open', function () {
         });
     });
     var l = new Promise(function(resolve, reject){
-        ViewDefRegister.load('./viewdefs/lab.json').then(function(row){
-            row.save(function(err, row){
-                if (err) reject(err);
-                resolve(row);
-            });
-        }).catch(function(err){
-            reject(err);
-        });
-    });
-
-    var pp = new Promise(function(resolve, reject){
-        ViewDefRegister.load('./viewdefs/paper.json').then(function(row){
+        ViewDefRegister.load('./viewdefs/feature.json').then(function(row){
             row.save(function(err, row){
                 if (err) reject(err);
                 resolve(row);
@@ -41,7 +30,7 @@ db.once('open', function () {
         });
     });
     
-    Promise.all([p, l ,pp]).then(function(res){
+    Promise.all([p, l]).then(function(res){
         console.log('saved!');
         console.log(JSON.stringify(res));
     }).catch(function(err){

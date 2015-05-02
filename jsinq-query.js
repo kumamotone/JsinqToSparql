@@ -1841,13 +1841,11 @@
       } 
 
       for(var i = 0; i < docs.length; i++) {
-          if(docs[i].viewname == "Prof") {
+          if(docs[i].viewname == "Product") {
             hoge = 0;
-          } else if (docs[i].viewname == "Lab"){
+          } else if (docs[i].viewname == "Feature"){
             hoge = 1;
-          } else if (docs[i].viewname == "Paper"){
-            hoge = 2;
-          }
+          } 
           _setValue(hoge, docs[i].sparql, docs[i].endpoint);
       }
     };
