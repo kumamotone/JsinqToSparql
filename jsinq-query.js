@@ -1835,14 +1835,14 @@
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
-                          console.log("--------------------------------->"); 
+                          // console.log("--------------------------------->"); 
                           /// console.log(valuesObj);
                           // Ç±ÇÃâ∫ÇÃàÍçsÇ™Ç»Ç¢Ç∆ìÆÇ´Ç‹ÇπÇÒ
                           // valuesObj[_this.selectKeys[i]] = v;
-                          // console.log(v);
+                          //console.log(v);
                       });
-                      callback(valuesObj);
                   }
+                  callback(valuesObj);
               }
           });
       } 

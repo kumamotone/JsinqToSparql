@@ -26,16 +26,17 @@ db.once('open', function () {
 
     ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {
     console.log("LINQ Query:" + querystr);
+    console.time('timer');
     var query = new jsinq.Query(querystr);
-
     query.executeQuery(query, docs,
     function (values) {
-      console.log("Results:");
+      // console.log("Results:");
       for (var key in values) {
-        console.log(key + ': ' + values[key]);
+        // console.log(key + ': ' + values[key]);
       }
+      console.timeEnd('timer');
     });
-  db.close();
+      db.close();
   // console.log(query.getQueryFunction().toString());
   });
 });
