@@ -37,7 +37,7 @@ client.query(query)
   //.bind('city', 'db:Casablanca')
 //  .bind('city', '<http://dbpedia.org/resource/Vienna>')
   .execute(function(error, results) {
-  //process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");1
+  process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");1
   timerCallback();
 });
 

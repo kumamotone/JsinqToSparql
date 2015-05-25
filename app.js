@@ -21,6 +21,7 @@ db.once('open', function () {
   from product in $0 \
   join feature in $1  \
   on product.prdctft equals feature.ft \
+  where product.prdctlbl.charAt(0) == \'S\' \
   select [product.prdctlbl, feature.ftct]  \
   ';
 

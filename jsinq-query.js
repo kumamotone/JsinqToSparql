@@ -1733,6 +1733,9 @@
          console.log(r);
        });
 
+      console.log("x.stringify!!!!!!!!!!!!!!!!!!!!!!!!1");
+      console.log(JSON.stringify(x));
+
       // select•¶‚Å‚Æ‚Á‚Ä‚­‚éƒJƒ‰ƒ€‚Ì–¼‘O‚ð‚¨‚Ú‚¦‚é
       
       for (var i = 0; i < x.parsed.length; i++) {
