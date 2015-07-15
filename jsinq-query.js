@@ -65,7 +65,10 @@
 	
 	// Length in characters of the longest binary operator 
 	var MAX_BINARY_OPERATOR_CHARACTERS = 4;
-	
+
+  var wheres = [];
+  var selects = [];
+
 	// Helper function that, given a linear array turns it into a look-up table
 	// and returns a function that, given a value, returns true if that value
 	// exists in the look-up table.
@@ -1124,7 +1127,7 @@
 			code.push('}');
 			return code.join('');
 		}
-		
+	
 		// The query compiler works by repeatedly applying transformations
 		// to the expression tree. Each transformation is associated with a
 		// specific pattern of query clauses and it is applied for as long as
@@ -1136,13 +1139,14 @@
 		// applied in the order in which they are specified. 
 		// Note that this corresponds directly to the point "Query expression
 		// translation" in the C# Language Specification.
-		
+	
+    debugger;
 		var transformations = [
 			// Select and groupby clauses with continuations
-			[
-				{
+			[	{
 					pattern: ['*', 'into', null],
 					transformer: function(root, match) {
+    debugger
 						var intoClause = root[match[1]];
 						
 						root[match[1]] = intoClause[1][1];
@@ -1166,6 +1170,8 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];
 						if (match[1] - match[0] > 1) {
@@ -1180,6 +1186,7 @@
 										fromClause[0] + ';'), ')'
 								]
 							]);
+              selects.push(selectClause[0]);
 							return true;
 						}
 						return false;
@@ -1191,6 +1198,8 @@
 				{
 					pattern: ['from', 'from', 'select', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from from select null");
 						var firstFromClause = root[match[0]][1];
 						var secondFromClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];
@@ -1217,12 +1226,15 @@
 									selectClause[0] + ';'), ')'
 							]
 						]);
+            selects.push(selectClause[0]);
 						return true;
 					}
 				},
 				{
 					pattern: ['from', 'from'],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from from");
 						var firstFromClause = root[match[0]][1];
 						var secondFromClause = root[match[1]][1];
 						root.splice(match[0], 1, [
@@ -1253,6 +1265,8 @@
 				{
 					pattern: ['from', 'let'],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from let");
 						var fromClause = root[match[0]][1];
 						var letClause = root[match[1]][1];
 						root.splice(match[0], 1, [
@@ -1278,7 +1292,9 @@
 				{
 					pattern: ['from', 'where'],
 					transformer: function(root, match) {
-						var fromClause = root[match[0]][1];
+    debugger;
+						console.log("transforming: from where");
+            var fromClause = root[match[0]][1];
 						var whereClause = root[match[1]][1];
 						root.splice(match[1], 1, [
 							'compiled',
@@ -1287,12 +1303,15 @@
 									'return ' + whereClause[0] + ';'), ')'
 							]
 						]);
+            wheres.push(whereClause[0]);
 						return true;
 					}				
 				},
 				{
 					pattern: ['from', 'join', 'select', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from join select null");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];												
@@ -1323,12 +1342,15 @@
 									'return ' + selectClause[0] + ';'), ')'
 							]
 						]);
+            selects.push(selectClause[0]);
 						return true;
 					}
 				},
 				{
 					pattern: ['from', 'join'],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from join");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						// Exclude join-intos
@@ -1363,6 +1385,8 @@
 				{
 					pattern: ['from', 'join', 'select', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from join select null");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];
@@ -1392,12 +1416,15 @@
 									'return ' + selectClause[0] + ';'), ')'
 							]
 						]);
+            selects.push(selectClause[0]);
 						return true;
 					}
 				},
 				{
 					pattern: ['from', 'join'],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from join");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						
@@ -1433,6 +1460,8 @@
 				{
 					pattern: ['from', 'orderby'],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from orderby");
 						var fromClause = root[match[0]][1];
 						var orderbyClause = root[match[1]][1];
 						var orderingPostfix = '';
@@ -1467,6 +1496,8 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];					
 						root.splice(match[0], 1, [
@@ -1482,6 +1513,7 @@
 									'return ' + selectClause[0] + ';'), ')'
 							]
 						]);
+            selects.push(selectClause[0]);
 						return true;
 					}				
 				}
@@ -1491,6 +1523,8 @@
 				{
 					pattern: ['from', 'group', null],
 					transformer: function(root, match) {
+    debugger;
+						console.log("transforming: from group null");
 						var fromClause = root[match[0]][1];
 						var groupClause = root[match[1]][1];					
 						root.splice(match[0], 1, [
@@ -1518,6 +1552,7 @@
 			]
 		];
 
+    debugger;
 		// Traverses the expression tree in post-order and invokes the 
 		// specified visitor function for each node in the tree.
 		function postOrderTraverse(root, visitor) {
@@ -1799,8 +1834,12 @@
 
       var _this = this;
       var count = 0;
-      var _setValue = function (index, viewdef, endpoint) {
-          // SPARQL エンドポイントのアドレス 
+      var _setValue = function (index,vname, viewdef, endpoint) {
+          console.log("wheres----------------------->");
+          console.log(wheres);
+          console.log("selects----------------------->");
+          console.log(_this.selectKeys);
+// SPARQL エンドポイントのアドレス 
           var sparqlClient = new SparqlClient(endpoint);
 
           // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
@@ -1808,7 +1847,37 @@
           // var util = require('util');
 
           console.log("Query to: " + endpoint);
+
+          // 書き変え処理
+          // 怖いので同じメソッドにとりあえず書く
+          var SparqlParser = require('./SPARQL.js/').Parser;
+          var parser = new SparqlParser();
+          var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
+          viewdef = viewdef.replace(temp, "");
+
           console.log("ViewQuery : " + viewdef);
+          var parsedQuery = parser.parse(viewdef);
+          
+          JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
+          // console.log('ugaaaaaaaaaaaaaaaa'+JSON.stringify(_this.selectKeys));
+          var selecting = RegExp.$1;
+          //console.log(s); 
+          
+          parsedQuery.variables = [selecting];
+
+          for (var idx in wheres) {
+             vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
+             if (vn == vname)
+             {
+                enzan = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length ).split( " == ");
+                parsedQuery.where.push({"type":"filter",
+                  "expression":{"type":"operation","operator":"regex","args":["?"+enzan[0], enzan[1] ]}});
+            }
+          }
+
+          //console.log(parsedQuery); 
+          console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
+
           // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
 
           // todo sparql クライアントに一斉に投げる（非同期処理)
@@ -1853,10 +1922,12 @@
       for(var i = 0; i < docs.length; i++) {
           if(docs[i].viewname == "Product") {
             hoge = 0;
+            vname = "product"
           } else if (docs[i].viewname == "Feature"){
             hoge = 1;
+            vname = "feature"
           } 
-          _setValue(hoge, docs[i].sparql, docs[i].endpoint);
+          _setValue(hoge, vname, docs[i].sparql, docs[i].endpoint);
       }
     };
   }

@@ -15,16 +15,45 @@ mongoose.connect('mongodb://localhost/');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
+  var SparqlParser = require('./SPARQL.js/').Parser;
+  var parser = new SparqlParser();
+  var parsedQuery = parser.parse(
+  'PREFIX foaf:    <http://xmlns.com/foaf/0.1/>'+
+  'SELECT ?name ?mbox'+
+  '{  ?x foaf:name ?name .'+
+  '  ?x foaf:mbox ?mbox .'+
+  '  FILTER regex(?name, "Smith") }');
+  
+  // console.log(parsedQuery);
+
+ for( var i in parsedQuery.where ){
+    if( parsedQuery.where[i].type == 'filter' ) { 
+      exp = parsedQuery.where[i].expression;
+      // console.log(exp);
+    }
+  }
+  // parsedQuery.where.push({"type":"filter","expression":{"type":"operation","operator":"regex","args":["?name","\"Smi\""]}});
+  // console.log(parsedQuery);
+  // console.log(parsedQuery.where[1].expression);
+  // console.log(parsedQuery.where[1].expression.args);
+
+  // parsedQuery.where[1].expression.args.push();
+
+  // var SparqlGenerator = require('./SPARQL.js/').Generator;
+  // var generator = new SparqlGenerator();
+  // parsedQuery.variables.push('?mickey');
+  // var generatedQuery = generator.stringify(parsedQuery);
+
+  // console.log(generatedQuery);
 
   // LINQコード
   var querystr = ' \
-  from product in $0 \
-  join feature in $1  \
-  on product.prdctft equals feature.ft \
-  where product.prdctlbl.charAt(0) == \'S\' \
-  select [product.prdctlbl, feature.ftct]  \
+    from product in $0 \
+    join feature in $1  \
+    on product.prdctft equals feature.ft \
+    where feature.ftct == "abc" \
+    select [product.prdctlbl, feature.prdct, feature.ftct]  \
   ';
-
     ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {
     console.log("LINQ Query:" + querystr);
     console.time('timer');
@@ -41,4 +70,3 @@ db.once('open', function () {
   // console.log(query.getQueryFunction().toString());
   });
 });
-
