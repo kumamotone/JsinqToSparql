@@ -5,7 +5,8 @@
     "results": {
     "type":"array", "items":{
     "type":"object", "properties":{
-    "?label": { "type":"string" },
-    "?value": { "type":"string" } }}}}},
+    "?ft": { "type":"string" },
+    "?ftlbl": { "type":"string" },
+    "?ftct":{"type":"string"} }}}}},
   "endpoint": "http://130.158.76.22:8890/sparql"
 }

@@ -1763,10 +1763,12 @@
       queryFunction = new Function('_$qp', 
           y);
 
+      /*
       console.log("pasudo!!!");
        x.parsed.forEach(function(r){
          console.log(r);
        });
+      */
 
       console.log("x.stringify!!!!!!!!!!!!!!!!!!!!!!!!1");
       console.log(JSON.stringify(x));
@@ -1779,8 +1781,8 @@
           var selects = selectStr.match(/return\[(.*)\]/);
           if (!selects) { continue; }
           this.selectKeys = selects[1].split(/,/);
-          console.log("---selectKeys--------");
-          console.log(this.selectKeys);
+          //console.log("---selectKeys--------");
+          //console.log(this.selectKeys);
       }
 
     } catch (e) {			
@@ -1834,12 +1836,12 @@
 
       var _this = this;
       var count = 0;
-      var _setValue = function (index,vname, viewdef, endpoint) {
-          console.log("wheres----------------------->");
-          console.log(wheres);
-          console.log("selects----------------------->");
-          console.log(_this.selectKeys);
-// SPARQL エンドポイントのアドレス 
+      var _setValue = function (index, vname, viewdef, endpoint) {
+          //console.log("wheres----------------------->");
+          //console.log(wheres);
+          //console.log("selects----------------------->");
+          //console.log(_this.selectKeys);
+          // SPARQL エンドポイントのアドレス 
           var sparqlClient = new SparqlClient(endpoint);
 
           // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
@@ -1855,28 +1857,55 @@
           var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
           viewdef = viewdef.replace(temp, "");
 
-          console.log("ViewQuery : " + viewdef);
+          // console.log("ViewQuery : " + viewdef);
           var parsedQuery = parser.parse(viewdef);
-          
-          JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
+         
+          // console.log(_this.selectKeys);
+          parsedQuery.variables = []
+          for (var idx in _this.selectKeys) {
+            var aaaa = _this.selectKeys[idx].split(".");
+            if (aaaa[0] == vname) {
+              parsedQuery.variables.push("?"+aaaa[1]);  
+            }
+          }
+      
+          // todo:select句に指定されていないがjoin句に指定されている要素があれば追加しなければならない
+
+          //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
           // console.log('ugaaaaaaaaaaaaaaaa'+JSON.stringify(_this.selectKeys));
-          var selecting = RegExp.$1;
+          // var selecting = "?" + RegExp.$1;
           //console.log(s); 
           
-          parsedQuery.variables = [selecting];
+          // parsedQuery.variables = [selecting];
 
           for (var idx in wheres) {
              vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
              if (vn == vname)
              {
-                enzan = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length ).split( " == ");
-                parsedQuery.where.push({"type":"filter",
+               cond = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length );
+               if(cond.indexOf(" == ") !== -1) { 
+               enzan = cond.split( " == ");
+               parsedQuery.where.push({"type":"filter",
                   "expression":{"type":"operation","operator":"regex","args":["?"+enzan[0], enzan[1] ]}});
-            }
+               }else if (cond.indexOf(" < ") !== -1) {
+                enzan = cond.split( " < ");
+                 parsedQuery.where.push({"type":"filter",
+                  "expression":{"type": 'operation',"operator": '<',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
+               }else if(cond.indexOf(" > ") !== -1) {
+                enzan = cond.split( " > ");
+                 parsedQuery.where.push({"type":"filter",
+                  "expression":{ "type": 'operation',"operator": '>',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
+              }
+             }
           }
 
-          //console.log(parsedQuery); 
-          console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
+          var SparqlGenerator = require('./SPARQL.js/').Generator;
+          var generator = new SparqlGenerator();
+          var sendQuery = generator.stringify(parsedQuery)
+          console.log("Sending:" + sendQuery);
+
+          // console.log(parsedQuery); 
+          // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
 
           // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
 
@@ -1885,7 +1914,7 @@
           // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
           // arg0 ... error 用変数
           // arg1 ... 実行結果
-          sparqlClient.query(viewdef).execute(function(error, ret) {
+          sparqlClient.query(sendQuery).execute(function(error, ret) {
               var bindings = ret.results.bindings;
               var values = bindings.map(function(binding) {
                   var s = {};
@@ -1902,18 +1931,20 @@
               if (count == docs.length) {
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
-                  /// console.log(enumerator);
+                  console.log(JSON.stringify(enumerator));
                   while (enumerator.moveNext()) {
                       var name = enumerator.current();
                       var valuesObj = {};
                       name.forEach(function (v, i) {
                           // console.log("--------------------------------->"); 
-                          /// console.log(valuesObj);
+                          // console.log(valuesObj);
                           // この下の一行がないと動きません
+                          valuesObj[_this.selectKeys[i]] = v;
                           // valuesObj[_this.selectKeys[i]] = v;
-                          //console.log(v);
+                          console.log(_this.selectKeys[i]+"     "+ v);
                       });
                   }
+                  // console.log("valuesObj"+JSON.stringify(valuesObj));
                   callback(valuesObj);
               }
           });

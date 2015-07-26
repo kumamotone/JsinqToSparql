@@ -12,9 +12,12 @@ var ViewDef = mongoose.model('viewdef', {
 });
 
 mongoose.connect('mongodb://localhost/');
+
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
+  
   var SparqlParser = require('./SPARQL.js/').Parser;
   var parser = new SparqlParser();
   var parsedQuery = parser.parse(
@@ -22,37 +25,38 @@ db.once('open', function () {
   'SELECT ?name ?mbox'+
   '{  ?x foaf:name ?name .'+
   '  ?x foaf:mbox ?mbox .'+
-  '  FILTER regex(?name, "Smith") }');
+  '  FILTER (?name > 50 ) }');
   
-  // console.log(parsedQuery);
+  console.log(parsedQuery);
 
  for( var i in parsedQuery.where ){
     if( parsedQuery.where[i].type == 'filter' ) { 
       exp = parsedQuery.where[i].expression;
-      // console.log(exp);
+      console.log(exp);
     }
   }
-  // parsedQuery.where.push({"type":"filter","expression":{"type":"operation","operator":"regex","args":["?name","\"Smi\""]}});
+  
+   parsedQuery.where.push({"type":"filter","expression":{"type":"operation","operator":"regex","args":["?name","\"Smi\""]}});
   // console.log(parsedQuery);
   // console.log(parsedQuery.where[1].expression);
   // console.log(parsedQuery.where[1].expression.args);
 
   // parsedQuery.where[1].expression.args.push();
 
-  // var SparqlGenerator = require('./SPARQL.js/').Generator;
-  // var generator = new SparqlGenerator();
-  // parsedQuery.variables.push('?mickey');
-  // var generatedQuery = generator.stringify(parsedQuery);
+   var SparqlGenerator = require('./SPARQL.js/').Generator;
+   var generator = new SparqlGenerator();
+   parsedQuery.variables.push('?mickey');
+   var generatedQuery = generator.stringify(parsedQuery);
 
-  // console.log(generatedQuery);
+  console.log(generatedQuery);
 
   // LINQコード
   var querystr = ' \
     from product in $0 \
     join feature in $1  \
     on product.prdctft equals feature.ft \
-    where feature.ftct == "abc" \
-    select [product.prdctlbl, feature.prdct, feature.ftct]  \
+    where product.value1 < 100 \
+    select [product.prdctft, product.prdctlbl, product.value1, feature.ft, feature.ftct]  \
   ';
     ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {
     console.log("LINQ Query:" + querystr);
@@ -60,7 +64,7 @@ db.once('open', function () {
     var query = new jsinq.Query(querystr);
     query.executeQuery(query, docs,
     function (values) {
-      // console.log("Results:");
+      console.log("Results:");
       for (var key in values) {
         // console.log(key + ': ' + values[key]);
       }
