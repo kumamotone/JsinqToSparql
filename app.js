@@ -1,3 +1,4 @@
+console.time('timer');
 // jsinq をロード
 require('./jsinq');
 require('./jsinq-query');
@@ -17,7 +18,7 @@ mongoose.connect('mongodb://localhost/');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-  
+ /* 
   var SparqlParser = require('./SPARQL.js/').Parser;
   var parser = new SparqlParser();
   var parsedQuery = parser.parse(
@@ -49,26 +50,27 @@ db.once('open', function () {
    var generatedQuery = generator.stringify(parsedQuery);
 
   console.log(generatedQuery);
-
+*/
   // LINQコード
   var querystr = ' \
     from product in $0 \
     join feature in $1  \
     on product.prdctft equals feature.ft \
-    where product.value1 < 100 \
-    select [product.prdctft, product.prdctlbl, product.value1, feature.ft, feature.ftct]  \
+    where product.value1 < 400 \
+    select [product.prdct, product.prdctlbl, product.value2, product.text1, product.text2, product.text3, \
+            product.pdate, feature.ft, feature.ftct, feature.fdate]  \
   ';
     ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {
     console.log("LINQ Query:" + querystr);
-    console.time('timer');
     var query = new jsinq.Query(querystr);
     query.executeQuery(query, docs,
     function (values) {
-      console.log("Results:");
+      //console.log("Results:");
       for (var key in values) {
-        // console.log(key + ': ' + values[key]);
+        console.log(key + ': ' + values[key]);
       }
-      console.timeEnd('timer');
+      console.timeEnd('format');
+      // console.timeEnd('timer');
     });
       db.close();
   // console.log(query.getQueryFunction().toString());

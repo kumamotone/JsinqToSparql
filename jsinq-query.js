@@ -1901,7 +1901,7 @@
 
           var SparqlGenerator = require('./SPARQL.js/').Generator;
           var generator = new SparqlGenerator();
-          var sendQuery = generator.stringify(parsedQuery)
+          var sendQuery = temp + generator.stringify(parsedQuery)
           console.log("Sending:" + sendQuery);
 
           // console.log(parsedQuery); 
@@ -1914,6 +1914,9 @@
           // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
           // arg0 ... error 用変数
           // arg1 ... 実行結果
+          console.timeEnd('timer');
+          console.log("(viewname:"+vname+")");
+          console.time('request'+vname);
           sparqlClient.query(sendQuery).execute(function(error, ret) {
               var bindings = ret.results.bindings;
               var values = bindings.map(function(binding) {
@@ -1921,28 +1924,32 @@
                   for (var k in binding) {
                       s[k] = binding[k].value;
                   }
-                  /// console.log(JSON.stringify(s));
+                  // console.log(JSON.stringify(s));
                   return s;
               });
               query.setValue(index, new jsinq.Enumerable(values));
               /// console.log(index.toString());console.log(values);
               
+              console.timeEnd('request'+vname);
               count++;
               if (count == docs.length) {
+                  console.time('format');
                   var result = query.execute();
                   var enumerator = result.getEnumerator();
                   console.log(JSON.stringify(enumerator));
                   while (enumerator.moveNext()) {
                       var name = enumerator.current();
                       var valuesObj = {};
+                      // console.log("result----->");
                       name.forEach(function (v, i) {
                           // console.log("--------------------------------->"); 
                           // console.log(valuesObj);
                           // この下の一行がないと動きません
                           valuesObj[_this.selectKeys[i]] = v;
                           // valuesObj[_this.selectKeys[i]] = v;
-                          console.log(_this.selectKeys[i]+"     "+ v);
+                          // console.log(_this.selectKeys[i]+"     "+ v);
                       });
+                      // console.log("<-------result");
                   }
                   // console.log("valuesObj"+JSON.stringify(valuesObj));
                   callback(valuesObj);
