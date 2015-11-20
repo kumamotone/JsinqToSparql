@@ -1832,7 +1832,7 @@
 
     this.executeQuery = function(query, docs, callback) {
       // node-sparql-client を使用する
-      var SparqlClient = require('./node-sparql-client/');
+      var SparqlClient = require('node-sparql-client');
 
       var _this = this;
       var count = 0;
@@ -1852,7 +1852,7 @@
 
           // 書き変え処理
           // 怖いので同じメソッドにとりあえず書く
-          var SparqlParser = require('./SPARQL.js/').Parser;
+          var SparqlParser = require('sparqljs').Parser;
           var parser = new SparqlParser();
           var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
           viewdef = viewdef.replace(temp, "");
@@ -1899,7 +1899,7 @@
              }
           }
 
-          var SparqlGenerator = require('./SPARQL.js/').Generator;
+          var SparqlGenerator = require('sparqljs').Generator;
           var generator = new SparqlGenerator();
           var sendQuery = temp + generator.stringify(parsedQuery)
           console.log("Sending:" + sendQuery);

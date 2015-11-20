@@ -1,12 +1,12 @@
 {
-  "name": "JsinqToSparql",
+  "name": "jsinqtosparql",
   "version": "1.0.0",
-  "description": "JsinqToSparql",
+  "description": "jsinq parser to sparql query",
   "main": "app.js",
   "dependencies": {
-    "lodash": "^3.3.1",
-    "promise": "^7.0.0",
-    "mongoose": "^4.0.1"
+    "promise": "^7.0.4",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.2.6"
   },
   "devDependencies": {},
   "scripts": {
@@ -14,12 +14,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kumamotone/JsinqToSparql.git"
+    "url": "git+https://github.com/kumamotone/JsinqToSparql.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "jsinq",
+    "sparql",
+    "rdf"
+  ],
+  "author": "kumamotone",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kumamotone/JsinqToSparql/issues"
   },
-  "homepage": "https://github.com/kumamotone/JsinqToSparql"
+  "homepage": "https://github.com/kumamotone/JsinqToSparql#readme"
 }

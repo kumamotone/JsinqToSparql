@@ -1,6 +1,3 @@
-[submodule "node-sparql-client"]
-	path = node-sparql-client
-	url = git://github.com/thomasfr/node-sparql-client.git
 [submodule "SPARQL.js"]
 	path = SPARQL.js
 	url = https://github.com/RubenVerborgh/SPARQL.js.git

@@ -4,6 +4,13 @@ JsinqToSparql
 
 A Jsinq provider to SPARQL.
 
+## usage
+
+```
+npm install
+node insert.js # to registor views
+```
+
 ## Description
 
 I added submodule node-sparql-client by:
@@ -17,23 +24,3 @@ git rm -r ./node-sparql-client
 I installed lodash by:
 
 npm install lodash --save
-
-
-## Demo
-
-## VS. 
-
-## Requirement
-
-## Usage
-
-## Install
-
-## Contribution
-
-## Licence
-
-## Author
-
-Kazumasa Kumamoto
-
