@@ -1832,7 +1832,7 @@
 
     this.executeQuery = function(query, docs, callback) {
       // node-sparql-client ‚ðŽg—p‚·‚é
-      var SparqlClient = require('node-sparql-client');
+      var SparqlClient = require('sparql-client');
 
       var _this = this;
       var count = 0;
