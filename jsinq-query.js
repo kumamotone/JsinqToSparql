@@ -1773,7 +1773,7 @@
       console.log("x.stringify!!!!!!!!!!!!!!!!!!!!!!!!1");
       console.log(JSON.stringify(x));
 
-      // select•¶‚Å‚Æ‚Á‚Ä‚­‚éƒJƒ‰ƒ€‚Ì–¼‘O‚ğ‚¨‚Ú‚¦‚é
+      // selectæ–‡ã§ã¨ã£ã¦ãã‚‹ã‚«ãƒ©ãƒ ã®åå‰ã‚’ãŠã¼ãˆã‚‹
       
       for (var i = 0; i < x.parsed.length; i++) {
           if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
@@ -1831,7 +1831,7 @@
     };
 
     this.executeQuery = function(query, docs, callback) {
-      // node-sparql-client ‚ğg—p‚·‚é
+      // node-sparql-client ã‚’ä½¿ç”¨ã™ã‚‹
       var SparqlClient = require('sparql-client');
 
       var _this = this;
@@ -1841,17 +1841,17 @@
           //console.log(wheres);
           //console.log("selects----------------------->");
           //console.log(_this.selectKeys);
-          // SPARQL ƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ÌƒAƒhƒŒƒX 
+          // SPARQL ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®ã‚¢ãƒ‰ãƒ¬ã‚¹ 
           var sparqlClient = new SparqlClient(endpoint);
 
           // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
-          // ‚Æ‚©‚â‚é‚Æ‚«‚É•K—v
+          // ã¨ã‹ã‚„ã‚‹ã¨ãã«å¿…è¦
           // var util = require('util');
 
           console.log("Query to: " + endpoint);
 
-          // ‘‚«•Ï‚¦ˆ—
-          // •|‚¢‚Ì‚Å“¯‚¶ƒƒ\ƒbƒh‚É‚Æ‚è‚ ‚¦‚¸‘‚­
+          // æ›¸ãå¤‰ãˆå‡¦ç†
+          // æ€–ã„ã®ã§åŒã˜ãƒ¡ã‚½ãƒƒãƒ‰ã«ã¨ã‚Šã‚ãˆãšæ›¸ã
           var SparqlParser = require('sparqljs').Parser;
           var parser = new SparqlParser();
           var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
@@ -1869,9 +1869,9 @@
             }
           }
       
-          // todo:select‹å‚Éw’è‚³‚ê‚Ä‚¢‚È‚¢‚ªjoin‹å‚Éw’è‚³‚ê‚Ä‚¢‚é—v‘f‚ª‚ ‚ê‚Î’Ç‰Á‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+          // todo:selectå¥ã«æŒ‡å®šã•ã‚Œã¦ã„ãªã„ãŒjoinå¥ã«æŒ‡å®šã•ã‚Œã¦ã„ã‚‹è¦ç´ ãŒã‚ã‚Œã°è¿½åŠ ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„
 
-          //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // •¡”‚ ‚éê‡‚Íæ‚ê‚È‚¢?
+          //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // è¤‡æ•°ã‚ã‚‹å ´åˆã¯å–ã‚Œãªã„?
           // console.log('ugaaaaaaaaaaaaaaaa'+JSON.stringify(_this.selectKeys));
           // var selecting = "?" + RegExp.$1;
           //console.log(s); 
@@ -1907,13 +1907,13 @@
           // console.log(parsedQuery); 
           // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
 
-          // qp ‚²‚Æ‚É sparqlclient.query(nank).execute(function() ),.. ‚ğ‚·‚é
+          // qp ã”ã¨ã« sparqlclient.query(nank).execute(function() ),.. ã‚’ã™ã‚‹
 
-          // todo sparql ƒNƒ‰ƒCƒAƒ“ƒg‚ÉˆêÄ‚É“Š‚°‚éi”ñ“¯Šúˆ—)
-          // ƒNƒGƒŠÀs
-          // sparqlClient.query(Às‚·‚éSPARQL•¶).execute(function(arg0, arg1) {});
-          // arg0 ... error —p•Ï”
-          // arg1 ... ÀsŒ‹‰Ê
+          // todo sparql ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ä¸€æ–‰ã«æŠ•ã’ã‚‹ï¼ˆéåŒæœŸå‡¦ç†)
+          // ã‚¯ã‚¨ãƒªå®Ÿè¡Œ
+          // sparqlClient.query(å®Ÿè¡Œã™ã‚‹SPARQLæ–‡).execute(function(arg0, arg1) {});
+          // arg0 ... error ç”¨å¤‰æ•°
+          // arg1 ... å®Ÿè¡Œçµæœ
           console.timeEnd('timer');
           console.log("(viewname:"+vname+")");
           console.time('request'+vname);
@@ -1944,7 +1944,7 @@
                       name.forEach(function (v, i) {
                           // console.log("--------------------------------->"); 
                           // console.log(valuesObj);
-                          // ‚±‚Ì‰º‚Ìˆês‚ª‚È‚¢‚Æ“®‚«‚Ü‚¹‚ñ
+                          // ã“ã®ä¸‹ã®ä¸€è¡ŒãŒãªã„ã¨å‹•ãã¾ã›ã‚“
                           valuesObj[_this.selectKeys[i]] = v;
                           // valuesObj[_this.selectKeys[i]] = v;
                           // console.log(_this.selectKeys[i]+"     "+ v);

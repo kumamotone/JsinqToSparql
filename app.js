@@ -1,9 +1,9 @@
 console.time('timer');
-// jsinq $B$r%m!<%I(B
+// jsinq をロード
 require('./jsinq');
 require('./jsinq-query');
 var mongoose = require('mongoose');
-// $B%G%P%C%0%3!<%I(B
+// デバッグコード
 
 var ViewDef = mongoose.model('viewdef', { 
   viewname: String,
@@ -51,7 +51,7 @@ db.once('open', function () {
 
   console.log(generatedQuery);
 */
-  // LINQ$B%3!<%I(B
+  // LINQコード
   var querystr = ' \
     from product in $0 \
     join feature in $1  \
