@@ -1,7 +1,7 @@
 console.time('ready');
-var SparqlClient = require('node-sparql-client');
+var SparqlClient = require('sparql-client');
 var util = require('util');
-var endpoint = 'http://130.158.76.22:8890/sparql';
+var endpoint = 'http://192.168.225.129:8890/sparql';
 
 // Get the leaderName(s) of the given citys
 // if you do not bind any city, it returns 10 random leaderNames

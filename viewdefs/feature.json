@@ -10,5 +10,5 @@
     "?ftct":{"type":"string"},
     "?fdate": { "type":"string" }
     }}}}},
-  "endpoint": "http://130.158.76.22:8890/sparql"
+  "endpoint": "http://192.168.225.132:8890/sparql"
 }
