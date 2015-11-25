@@ -1790,6 +1790,13 @@
           //console.log(this.selectKeys);
       }
 
+      // join 句で指定されているキーをおぼえる
+      for (var i = 0; i < x.parsed.length; i++) {
+          if (! /\.join/.test(x.parsed[i][1][0])) { continue; }
+		  this.outerkey = x.parsed[i][1][3].match(/return (\w+) \. (\w+)/);
+		  this.innerkey = x.parsed[i][1][5].match(/return (\w+) \. (\w+)/);
+      }
+
     } catch (e) {			
       if (e instanceof ParseError) {
         var errorContext = getErrorContext(e, query);
@@ -1866,14 +1873,29 @@
           var parsedQuery = parser.parse(viewdef);
          
           // console.log(_this.selectKeys);
+          
+          // select 句を解釈して SPARQL クエリにプッシュダウン
           parsedQuery.variables = []
           for (var idx in _this.selectKeys) {
             var aaaa = _this.selectKeys[idx].split(".");
             if (aaaa[0] == vname) {
-              parsedQuery.variables.push("?"+aaaa[1]);  
+              parsedQuery.variables.push("?"+aaaa[1]);
             }
           }
-      
+		  
+		  // outerkey と innerkey が，select文に含まれていなければプッシュダウン
+		  if(_this.outerkey[1] == vname && parsedQuery.variables.indexOf(_this.outerkey[2]) == -1) {
+			  parsedQuery.variables.push("?"+ _this.outerkey[2]);
+		  }
+		  
+		  if(_this.innerkey[1] == vname && parsedQuery.variables.indexOf(_this.innerkey[2]) == -1) {
+			  parsedQuery.variables.push("?"+ _this.innerkey[2]);
+		  }
+        
+          console.log("joinnnnn" + JSON.stringify(parsedQuery));
+
+          // JOIN 句を解釈して SPARQL クエリの select 句に追加
+
           // todo:select句に指定されていないがjoin句に指定されている要素があれば追加しなければならない
 
           //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
