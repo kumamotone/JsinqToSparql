@@ -1,6 +1,4 @@
-JsinqToSparql 
-
-====
+# JsinqToSparql 
 
 Query Provider using JSINQ for SPARQL endpoints.
 
@@ -38,7 +36,7 @@ Make view definition files.
 | key       |                              value |
 |:----------|-----------------------------------:|
 | viewname  | Specify unique viewname            |
-| viewname  | Specify SPARQL view                |
+| sparql    | Specify SPARQL view                |
 | jsonschema| Specify contents of view for users |
 | endpoint  | Specify SPARQL endpoint address    |
 
