@@ -504,6 +504,7 @@
 										hasNext = false;
 										while (enumerator.moveNext()) {
 											current = enumerator.current();
+											// console.log("current:" + JSON.stringify(current));
 											key = outerKeySelector(current);
 											if (dictionary.containsKey(key)) {
 												secondList = 
@@ -1800,7 +1801,7 @@
 		var defaultObjectString = {}.toString();
 
 		function hashComplexKey(key) {
-      console.log(key);
+		    console.log(key);
 			if (comparer != null) {
 				return 0;
 			}
