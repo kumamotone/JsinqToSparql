@@ -1145,7 +1145,7 @@
 		// Note that this corresponds directly to the point "Query expression
 		// translation" in the C# Language Specification.
 	
-    debugger;
+    // debugger;
 		var transformations = [
 			// Select and groupby clauses with continuations
 			[	{
@@ -1297,7 +1297,7 @@
 				{
 					pattern: ['from', 'where'],
 					transformer: function(root, match) {
-    debugger;
+    // debugger;
 						console.log("transforming: from where");
             var fromClause = root[match[0]][1];
 						var whereClause = root[match[1]][1];
@@ -1354,7 +1354,7 @@
 				{
 					pattern: ['from', 'join'],
 					transformer: function(root, match) {
-    debugger;
+    // debugger;
 						console.log("transforming: from join");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
@@ -1501,7 +1501,7 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
-    debugger;
+    // debugger;
 						console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];					
@@ -1557,7 +1557,7 @@
 			]
 		];
 
-    debugger;
+    // debugger;
 		// Traverses the expression tree in post-order and invokes the 
 		// specified visitor function for each node in the tree.
 		function postOrderTraverse(root, visitor) {
