@@ -60,19 +60,20 @@ db.once('open', function () {
     select [product.prdct, product.prdctlbl, product.value2, product.text1, product.text2, product.text3, \
             product.pdate, feature.ft, feature.ftct, feature.fdate, producttype.ptlbl ]  \
   ';
-    ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}, {viewname: "ProductType"}]}, function(err, docs) {
-    console.log("LINQ Query:" + querystr);
-    var query = new jsinq.Query(querystr);
-    query.executeQuery(query, docs,
-    function (values) {
-      //console.log("Results:");
-      for (var key in values) {
-        console.log(key + ': ' + values[key]);
-      }
-      console.timeEnd('format');
-      // console.timeEnd('timer');
-    });
-      db.close();
+  
+  ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}, {viewname: "ProductType"}]}, function(err, docs) {
+  console.log("LINQ Query:" + querystr);
+  var query = new jsinq.Query(querystr);
+  query.executeQuery(query, docs,
+  function (values) {
+    //console.log("Results:");
+    for (var key in values) {
+      console.log(key + ': ' + values[key]);
+    }
+    console.timeEnd('format');
+    // console.timeEnd('timer');
+  });
+  db.close();
   // console.log(query.getQueryFunction().toString());
   });
 });
