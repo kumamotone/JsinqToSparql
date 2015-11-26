@@ -1996,7 +1996,10 @@
           } else if (docs[i].viewname == "Feature"){
             hoge = 1;
             vname = "feature"
-          } 
+          } else if (docs[i].viewname == "ProductType"){
+            hoge = 2;
+            vname = "producttype"
+          }
           _setValue(hoge, vname, docs[i].sparql, docs[i].endpoint);
       }
     };
