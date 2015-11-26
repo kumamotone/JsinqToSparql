@@ -1851,156 +1851,155 @@
       var _this = this;
       var count = 0;
       var _setValue = function (index, vname, viewdef, endpoint) {
-          //console.log("wheres----------------------->");
-          //console.log(wheres);
-          //console.log("selects----------------------->");
-          //console.log(_this.selectKeys);
-          // SPARQL エンドポイントのアドレス 
-          var sparqlClient = new SparqlClient(endpoint);
+        //console.log("wheres----------------------->");
+        //console.log(wheres);
+        //console.log("selects----------------------->");
+        //console.log(_this.selectKeys);
+        // SPARQL エンドポイントのアドレス 
+        var sparqlClient = new SparqlClient(endpoint);
 
-          // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
-          // とかやるときに必要
-          // var util = require('util');
+        // process.stdout.write(util.inspect(arguments, null, 20, true)+"\n");
+        // とかやるときに必要
+        // var util = require('util');
 
-          console.log("Query to: " + endpoint);
+        console.log("Query to: " + endpoint);
 
-          // 書き変え処理
-          // 怖いので同じメソッドにとりあえず書く
-          var SparqlParser = require('sparqljs').Parser;
-          var parser = new SparqlParser();
-          var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
-          viewdef = viewdef.replace(temp, "");
+        // 書き変え処理
+        // 怖いので同じメソッドにとりあえず書く
+        var SparqlParser = require('sparqljs').Parser;
+        var parser = new SparqlParser();
+        var temp = viewdef.substring(viewdef.indexOf("DEFINE"), viewdef.indexOf("PREFIX")-1);
+        viewdef = viewdef.replace(temp, "");
 
-          // console.log("ViewQuery : " + viewdef);
-          var parsedQuery = parser.parse(viewdef);
-         
-          // console.log(_this.selectKeys);
-          
-          // select 句を解釈して SPARQL クエリにプッシュダウン
-          parsedQuery.variables = []
-          for (var idx in _this.selectKeys) {
-            var aaaa = _this.selectKeys[idx].split(".");
-            if (aaaa[0] == vname) {
-              parsedQuery.variables.push("?"+aaaa[1]);
+        // console.log("ViewQuery : " + viewdef);
+        var parsedQuery = parser.parse(viewdef);
+        
+        // console.log(_this.selectKeys);
+        
+        // select 句を解釈して SPARQL クエリにプッシュダウン
+        parsedQuery.variables = []
+        for (var idx in _this.selectKeys) {
+          var aaaa = _this.selectKeys[idx].split(".");
+          if (aaaa[0] == vname) {
+            parsedQuery.variables.push("?"+aaaa[1]);
+          }
+        }
+    
+        function pushkey (value, index, array) {
+        // outerkey と innerkey が，select文に含まれていなければプッシュダウン
+          if(value[1] == vname && parsedQuery.variables.indexOf("?"+value[2]) === -1) {
+          parsedQuery.variables.push("?"+ value[2]);
+          }
+        }
+            
+        _this.innerkeys.forEach(pushkey);
+        _this.outerkeys.forEach(pushkey);
+        
+        // console.log("joinnnnn" + JSON.stringify(parsedQuery));
+
+        // JOIN 句を解釈して SPARQL クエリの select 句に追加
+
+        // todo:select句に指定されていないがjoin句に指定されている要素があれば追加しなければならない
+
+        //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
+        // console.log('ugaaaaaaaaaaaaaaaa'+JSON.stringify(_this.selectKeys));
+        // var selecting = "?" + RegExp.$1;
+        //console.log(s); 
+        
+        // parsedQuery.variables = [selecting];
+
+        for (var idx in wheres) {
+            vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
+            if (vn == vname) {
+              cond = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length );
+              if (cond.indexOf(" == ") !== -1) { 
+              enzan = cond.split( " == ");
+              parsedQuery.where.push({"type":"filter",
+                "expression":{"type":"operation","operator":"regex","args":["?"+enzan[0], enzan[1] ]}});
+              } else if (cond.indexOf(" < ") !== -1) {
+              enzan = cond.split( " < ");
+                parsedQuery.where.push({"type":"filter",
+                "expression":{"type": 'operation',"operator": '<',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
+              } else if(cond.indexOf(" > ") !== -1) {
+              enzan = cond.split( " > ");
+                parsedQuery.where.push({"type":"filter",
+                "expression":{ "type": 'operation',"operator": '>',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
+              }
             }
-          }
-		  
-		  function pushkey (value, index, array) {
-			// outerkey と innerkey が，select文に含まれていなければプッシュダウン
-		  	if(value[1] == vname && parsedQuery.variables.indexOf("?"+value[2]) === -1) {
-			  parsedQuery.variables.push("?"+ value[2]);
-		  	}
-		  }
-          
-		  _this.innerkeys.forEach(pushkey);
-		  _this.outerkeys.forEach(pushkey);
-		  
-          // console.log("joinnnnn" + JSON.stringify(parsedQuery));
+        }
 
-          // JOIN 句を解釈して SPARQL クエリの select 句に追加
+        var SparqlGenerator = require('sparqljs').Generator;
+        var generator = new SparqlGenerator();
+        var sendQuery = temp + generator.stringify(parsedQuery)
+        console.log("============= SendQuery =================");
+        console.log(sendQuery);
+        console.log("============= SendQuery =================");
 
-          // todo:select句に指定されていないがjoin句に指定されている要素があれば追加しなければならない
+        // console.log(parsedQuery); 
+        // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
 
-          //JSON.stringify(_this.selectKeys).match(new RegExp("\""+ vname + "\.(\\w+)\"")); // 複数ある場合は取れない?
-          // console.log('ugaaaaaaaaaaaaaaaa'+JSON.stringify(_this.selectKeys));
-          // var selecting = "?" + RegExp.$1;
-          //console.log(s); 
-          
-          // parsedQuery.variables = [selecting];
+        // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
 
-          for (var idx in wheres) {
-             vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
-             if (vn == vname)
-             {
-               cond = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length );
-               if(cond.indexOf(" == ") !== -1) { 
-               enzan = cond.split( " == ");
-               parsedQuery.where.push({"type":"filter",
-                  "expression":{"type":"operation","operator":"regex","args":["?"+enzan[0], enzan[1] ]}});
-               }else if (cond.indexOf(" < ") !== -1) {
-                enzan = cond.split( " < ");
-                 parsedQuery.where.push({"type":"filter",
-                  "expression":{"type": 'operation',"operator": '<',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
-               }else if(cond.indexOf(" > ") !== -1) {
-                enzan = cond.split( " > ");
-                 parsedQuery.where.push({"type":"filter",
-                  "expression":{ "type": 'operation',"operator": '>',"args": [ '?'+enzan[0], '"'+enzan[1]+'"'+'^^http://www.w3.org/2001/XMLSchema#integer' ] }});
+        // todo sparql クライアントに一斉に投げる（非同期処理)
+        // クエリ実行
+        // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
+        // arg0 ... error 用変数
+        // arg1 ... 実行結果
+        console.timeEnd('timer');
+        console.log("(viewname:"+vname+")");
+        console.time('request'+vname);
+        sparqlClient.query(sendQuery).execute(function(error, ret) {
+          var bindings = ret.results.bindings;
+          var values = bindings.map(function(binding) {
+              var s = {};
+              for (var k in binding) {
+                  s[k] = binding[k].value;
               }
-             }
-          }
-
-          var SparqlGenerator = require('sparqljs').Generator;
-          var generator = new SparqlGenerator();
-          var sendQuery = temp + generator.stringify(parsedQuery)
-          console.log("============= SendQuery =================");
-          console.log(sendQuery);
-          console.log("============= SendQuery =================");
-
-          // console.log(parsedQuery); 
-          // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
-
-          // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
-
-          // todo sparql クライアントに一斉に投げる（非同期処理)
-          // クエリ実行
-          // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
-          // arg0 ... error 用変数
-          // arg1 ... 実行結果
-          console.timeEnd('timer');
-          console.log("(viewname:"+vname+")");
-          console.time('request'+vname);
-          sparqlClient.query(sendQuery).execute(function(error, ret) {
-              var bindings = ret.results.bindings;
-              var values = bindings.map(function(binding) {
-                  var s = {};
-                  for (var k in binding) {
-                      s[k] = binding[k].value;
-                  }
-                  // console.log(JSON.stringify(s));
-                  return s;
-              });
-              query.setValue(index, new jsinq.Enumerable(values));
-              /// console.log(index.toString());console.log(values);
-              
-              console.timeEnd('request'+vname);
-              count++;
-              if (count == docs.length) {
-                  console.time('format');
-                  var result = query.execute();
-                  var enumerator = result.getEnumerator();
-                  console.log(JSON.stringify(enumerator));
-                  while (enumerator.moveNext()) {
-                      var name = enumerator.current();
-                      var valuesObj = {};
-                      // console.log("result----->");
-                      name.forEach(function (v, i) {
-                          // console.log("--------------------------------->"); 
-                          // console.log(valuesObj);
-                          // この下の一行がないと動きません
-                          valuesObj[_this.selectKeys[i]] = v;
-                          // valuesObj[_this.selectKeys[i]] = v;
-                          // console.log(_this.selectKeys[i]+"     "+ v);
-                      });
-                      // console.log("<-------result");
-                  }
-                  // console.log("valuesObj"+JSON.stringify(valuesObj));
-                  callback(valuesObj);
-              }
+              // console.log(JSON.stringify(s));
+              return s;
           });
+          query.setValue(index, new jsinq.Enumerable(values));
+          /// console.log(index.toString());console.log(values);
+          
+          console.timeEnd('request'+vname);
+          count++;
+          if (count == docs.length) {
+            console.time('format');
+            var result = query.execute();
+            var enumerator = result.getEnumerator();
+            console.log(JSON.stringify(enumerator));
+            while (enumerator.moveNext()) {
+                var name = enumerator.current();
+                var valuesObj = {};
+                // console.log("result----->");
+                name.forEach(function (v, i) {
+                    // console.log("--------------------------------->"); 
+                    // console.log(valuesObj);
+                    // この下の一行がないと動きません
+                    valuesObj[_this.selectKeys[i]] = v;
+                    // valuesObj[_this.selectKeys[i]] = v;
+                    // console.log(_this.selectKeys[i]+"     "+ v);
+                });
+                // console.log("<-------result");
+            }
+            // console.log("valuesObj"+JSON.stringify(valuesObj));
+            callback(valuesObj);
+          }
+        });
       } 
 
       for(var i = 0; i < docs.length; i++) {
-          if(docs[i].viewname == "Product") {
-            hoge = 0;
-            vname = "product"
-          } else if (docs[i].viewname == "Feature"){
-            hoge = 1;
-            vname = "feature"
-          } else if (docs[i].viewname == "ProductType"){
-            hoge = 2;
-            vname = "producttype"
-          }
-          _setValue(hoge, vname, docs[i].sparql, docs[i].endpoint);
+        if(docs[i].viewname == "Product") {
+          hoge = 0;
+          vname = "product"
+        } else if (docs[i].viewname == "Feature"){
+          hoge = 1;
+          vname = "feature"
+        } else if (docs[i].viewname == "ProductType"){
+          hoge = 2;
+          vname = "producttype"
+        }
+        _setValue(hoge, vname, docs[i].sparql, docs[i].endpoint);
       }
     };
   }
