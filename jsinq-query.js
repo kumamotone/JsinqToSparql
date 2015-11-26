@@ -1779,7 +1779,6 @@
       console.log(JSON.stringify(x));
 
       // select文でとってくるカラムの名前をおぼえる
-      
       for (var i = 0; i < x.parsed.length; i++) {
           if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
           var selectStr = x.parsed[i][1][1].replace(/\s*/g, '');
@@ -1791,10 +1790,13 @@
       }
 
       // join 句で指定されているキーをおぼえる
+	  this.outerkeys = [];
+	  this.innerkeys = [];
+	  
       for (var i = 0; i < x.parsed.length; i++) {
           if (! /\.join/.test(x.parsed[i][1][0])) { continue; }
-		  this.outerkey = x.parsed[i][1][3].match(/return (\w+) \. (\w+)/);
-		  this.innerkey = x.parsed[i][1][5].match(/return (\w+) \. (\w+)/);
+		  this.outerkeys.push(x.parsed[i][1][3].match(/return (\w+) \. (\w+)/));
+		  this.innerkeys.push(x.parsed[i][1][5].match(/return (\w+) \. (\w+)/));
       }
 
     } catch (e) {			
@@ -1883,16 +1885,17 @@
             }
           }
 		  
-		  // outerkey と innerkey が，select文に含まれていなければプッシュダウン
-		  if(_this.outerkey[1] == vname && parsedQuery.variables.indexOf(_this.outerkey[2]) == -1) {
-			  parsedQuery.variables.push("?"+ _this.outerkey[2]);
+		  function pushkey (value, index, array) {
+			// outerkey と innerkey が，select文に含まれていなければプッシュダウン
+		  	if(value[1] == vname && parsedQuery.variables.indexOf("?"+value[2]) === -1) {
+			  parsedQuery.variables.push("?"+ value[2]);
+		  	}
 		  }
+          
+		  _this.innerkeys.forEach(pushkey);
+		  _this.outerkeys.forEach(pushkey);
 		  
-		  if(_this.innerkey[1] == vname && parsedQuery.variables.indexOf(_this.innerkey[2]) == -1) {
-			  parsedQuery.variables.push("?"+ _this.innerkey[2]);
-		  }
-        
-          console.log("joinnnnn" + JSON.stringify(parsedQuery));
+          // console.log("joinnnnn" + JSON.stringify(parsedQuery));
 
           // JOIN 句を解釈して SPARQL クエリの select 句に追加
 
