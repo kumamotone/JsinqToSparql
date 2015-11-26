@@ -1,16 +1,15 @@
 var Promise = require('promise');
-
 var mongoose = require('mongoose');
-
-var ViewDefRegister = require('./ViewDefRegister');
+var ViewDefRegister = require('./register/ViewDefRegister');
+var args = process.argv.slice(2);
 
 mongoose.connect('mongodb://localhost/');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
 
-    var p = new Promise(function(resolve, reject){
-        ViewDefRegister.load('./viewdefs/product.json').then(function(row){
+function register(element, index, array) {
+    var task = new Promise(function(resolve, reject){
+        ViewDefRegister.load(element).then(function(row){
             row.save(function(err, row){
                 if (err) reject(err);
                 resolve(row);
@@ -19,18 +18,14 @@ db.once('open', function () {
             reject(err);
         });
     });
-    var l = new Promise(function(resolve, reject){
-        ViewDefRegister.load('./viewdefs/feature.json').then(function(row){
-            row.save(function(err, row){
-                if (err) reject(err);
-                resolve(row);
-            });
-        }).catch(function(err){
-            reject(err);
-        });
-    });
+    this.push(task);
+}
+
+db.once('open', function () {
+    var tasks = [];
+    args.forEach(register, tasks);
     
-    Promise.all([p, l]).then(function(res){
+    Promise.all(tasks).then(function(res){
         console.log('saved!');
         console.log(JSON.stringify(res));
     }).catch(function(err){
