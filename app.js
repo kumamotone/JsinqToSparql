@@ -13,8 +13,6 @@ var ViewDef = mongoose.model('viewdef', {
 });
 
 mongoose.connect('mongodb://localhost/');
-
-
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
@@ -56,11 +54,13 @@ db.once('open', function () {
     from product in $0 \
     join feature in $1  \
     on product.prdctft equals feature.ft \
+    join producttype in $2  \
+    on product.ptype equals producttype.pt \
     where product.value1 < 400 \
     select [product.prdct, product.prdctlbl, product.value2, product.text1, product.text2, product.text3, \
-            product.pdate, feature.ft, feature.ftct, feature.fdate]  \
+            product.pdate, feature.ft, feature.ftct, feature.fdate, producttype.ptlbl ]  \
   ';
-    ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}]}, function(err, docs) {
+    ViewDef.find({$or : [{viewname: "Product"}, {viewname: "Feature"}, {viewname: "ProductType"}]}, function(err, docs) {
     console.log("LINQ Query:" + querystr);
     var query = new jsinq.Query(querystr);
     query.executeQuery(query, docs,
