@@ -1932,7 +1932,9 @@
           var SparqlGenerator = require('sparqljs').Generator;
           var generator = new SparqlGenerator();
           var sendQuery = temp + generator.stringify(parsedQuery)
-          console.log("Sending:" + sendQuery);
+          console.log("============= SendQuery =================");
+          console.log(sendQuery);
+          console.log("============= SendQuery =================");
 
           // console.log(parsedQuery); 
           // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
