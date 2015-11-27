@@ -19,6 +19,9 @@ function register(element, index, array) {
         });
     });
     this.push(task);
+if (process.argv.length == 2) {
+  console.log("usage: node insert.js <file1> <file2> ...")
+  process.exit();
 }
 
 db.once('open', function () {
