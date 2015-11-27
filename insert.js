@@ -27,6 +27,14 @@ if (process.argv.length == 2) {
 }
 
 db.once('open', function () {
+  var dropViewdef = function(db, callback) {
+    db.collection('viewdefs').drop( function(err, response) {
+      console.log(response);
+      callback();
+    });
+  };
+  
+  dropViewdef(db, function() {
     var tasks = [];
     args.forEach(register, tasks);
     Promise.all(tasks).then(function(res){
@@ -37,4 +45,5 @@ db.once('open', function () {
     }).then(function(){
       db.close();
     });
+  });
 });
