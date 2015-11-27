@@ -7,9 +7,9 @@ var mongoose = require('mongoose');
 
 var ViewDef = mongoose.model('viewdef', { 
   viewname: String,
-    sparql: String,
-    jsonschema: Object,
-    endpoint: String
+  sparql: String,
+  jsonschema: Object,
+  endpoint: String
 });
 
 mongoose.connect('mongodb://localhost/');
