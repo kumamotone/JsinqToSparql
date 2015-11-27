@@ -1844,11 +1844,42 @@
       return queryFunction;
     };
 
-    this.executeQuery = function(query, docs, callback) {
-      // node-sparql-client を使用する
+    this.executeQuery = function(query, callback) {
+      var _this = this;
+      
+      // sparql-client を使用する
       var SparqlClient = require('sparql-client');
 
-      var _this = this;
+      var mongoose = require('mongoose');
+      mongoose.connect('mongodb://localhost/');
+      var db = mongoose.connection;       
+      // docs を mongo から引っ張ってくる
+      var ViewDef = mongoose.model('viewdef', { 
+        viewname: String,
+        sparql: String,
+        jsonschema: Object,
+        endpoint: String
+      });
+
+      db.on('error', console.error.bind(console, 'connection error:'));
+      db.once('open', function () {
+
+      ViewDef.find({}, function(err, docs) {
+        console.log(docs);
+        _this.docs = docs;
+          for(var i = 0; i < docs.length; i++) {
+            if(docs[i].viewname == "Product") {
+              _setValue(0, "product", docs[i].sparql, docs[i].endpoint);
+            } else if (docs[i].viewname == "Feature"){
+              _setValue(1, "feature", docs[i].sparql, docs[i].endpoint);
+            } else if (docs[i].viewname == "ProductType"){
+              _setValue(2, "producttype", docs[i].sparql, docs[i].endpoint);
+            }
+          }
+          db.close();
+        });
+      });
+
       var count = 0;
       var _setValue = function (index, vname, viewdef, endpoint) {
         //console.log("wheres----------------------->");
@@ -1963,7 +1994,7 @@
           
           console.timeEnd('request'+vname);
           count++;
-          if (count == docs.length) {
+          if (count == _this.docs.length) {
             console.time('format');
             var result = query.execute();
             var enumerator = result.getEnumerator();
@@ -1987,20 +2018,6 @@
           }
         });
       } 
-
-      for(var i = 0; i < docs.length; i++) {
-        if(docs[i].viewname == "Product") {
-          hoge = 0;
-          vname = "product"
-        } else if (docs[i].viewname == "Feature"){
-          hoge = 1;
-          vname = "feature"
-        } else if (docs[i].viewname == "ProductType"){
-          hoge = 2;
-          vname = "producttype"
-        }
-        _setValue(hoge, vname, docs[i].sparql, docs[i].endpoint);
-      }
     };
   }
   this.QueryTranslationException = QueryTranslationException;
