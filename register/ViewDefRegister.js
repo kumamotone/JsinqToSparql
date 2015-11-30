@@ -25,7 +25,9 @@ var load = function(filepath, callback){
                 }
                 else {
                     resolve(new ViewDef(row));
-                    console.log("resolved");
+                    console.log("JSONファイル" + filepath + " の内容を解釈しました．以下のビューを登録します．");
+                    console.log(row);
+                    console.log("");
                 }
             });
         });        

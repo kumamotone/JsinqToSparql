@@ -29,7 +29,11 @@ if (process.argv.length == 2) {
 db.once('open', function () {
   var dropViewdef = function(db, callback) {
     db.collection('viewdefs').drop( function(err, response) {
-      console.log(response);
+      if (response === true) {
+        console.log("古いビュークエリの登録を解除しました．");
+      } else {
+        console.log(response);
+      }
       callback();
     });
   };
@@ -38,8 +42,8 @@ db.once('open', function () {
     var tasks = [];
     args.forEach(register, tasks);
     Promise.all(tasks).then(function(res){
-      console.log('saved!');
-      console.log(JSON.stringify(res));
+      console.log("データが登録されました．");
+      // console.log(JSON.stringify(res));
     }).catch(function(err){
       console.error(err);
     }).then(function(){
