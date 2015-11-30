@@ -1,4 +1,5 @@
-console.time('timer');
+console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
+
 require('./jsinq');
 require('./jsinq-query');
 var fs = require('fs');
@@ -9,10 +10,11 @@ var querystr = ' \
           product.pdate ]  \
 ';
   
-console.log("LINQ Query:" + querystr);
+console.log("===== Given LINQ Query ====")
+console.log(querystr + "\n");
 var query = new jsinq.Query(querystr);
 query.executeQuery(query,
 function (retval) {
   fs.writeFile('outputs/outputs.json', JSON.stringify(retval));
-  console.timeEnd('format');
+  console.timeEnd('SPARQLエンドポイントの返り値の処理の時間');
 });

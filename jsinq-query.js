@@ -1777,8 +1777,8 @@
        });
       */
 
-      console.log("x.stringify!!!!!!!!!!!!!!!!!!!!!!!!1");
-      console.log(JSON.stringify(x));
+      console.log("===== Compiled Query Expression(Tree) =====");
+      console.log(JSON.stringify(x) + "\n");
 
       // select文でとってくるカラムの名前をおぼえる
       for (var i = 0; i < x.parsed.length; i++) {
@@ -1899,8 +1899,6 @@
         // とかやるときに必要
         // var util = require('util');
 
-        console.log("Query to: " + endpoint);
-
         // 書き変え処理
         // 怖いので同じメソッドにとりあえず書く
         var SparqlParser = require('sparqljs').Parser;
@@ -1968,9 +1966,8 @@
         var SparqlGenerator = require('sparqljs').Generator;
         var generator = new SparqlGenerator();
         var sendQuery = temp + generator.stringify(parsedQuery)
-        console.log("============= SendQuery =================");
-        console.log(sendQuery);
-        console.log("============= SendQuery =================");
+        console.log("===== ビュー " + vname + "(" + endpoint + ") に以下のクエリを送信しています... =====");
+        console.log(sendQuery + "\n");
 
         // console.log(parsedQuery); 
         // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
@@ -1982,9 +1979,8 @@
         // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
         // arg0 ... error 用変数
         // arg1 ... 実行結果
-        console.timeEnd('timer');
-        console.log("(viewname:"+vname+")");
-        console.time('request'+vname);
+        console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
+        console.time('ビュークエリ ' + vname + ' の実行時間');
         sparqlClient.query(sendQuery).execute(function(error, ret) {
           var bindings = ret.results.bindings;
           var values = bindings.map(function(binding) {
@@ -1998,10 +1994,10 @@
           query.setValue(index, new jsinq.Enumerable(values));
           /// console.log(index.toString());console.log(values);
           
-          console.timeEnd('request'+vname);
+          console.timeEnd('ビュークエリ ' + vname + ' の実行時間');
           count++;
           if (count == _this.viewnames.length) {
-            console.time('format');
+            console.time('SPARQLエンドポイントの返り値の処理の時間');
             var result = query.execute();
             var enumerator = result.getEnumerator();
             var retval = [];
