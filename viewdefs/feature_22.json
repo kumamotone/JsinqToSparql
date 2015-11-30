@@ -1,0 +1,14 @@
+{
+  "viewname" : "feature",
+  "sparql": "DEFINE get:refresh \"0\" DEFINE get:soft \"replace\" PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> PREFIX dc: <http://purl.org/dc/elements/1.1/>  SELECT * WHERE { ?ft rdf:type bsbm:ProductFeature . ?ft rdfs:label ?ftlbl . ?ft rdfs:comment ?ftct . ?prdctft dc:date ?fdate . } ",
+  "jsonschema": { "type":"object", "properties":{
+    "results": {
+    "type":"array", "items":{
+    "type":"object", "properties":{
+    "?ft": { "type":"string" },
+    "?ftlbl": { "type":"string" },
+    "?ftct":{"type":"string"},
+    "?fdate": { "type":"string" }
+    }}}}},
+  "endpoint": "http://130.158.76.22:8890/sparql"
+}
