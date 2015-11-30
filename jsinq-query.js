@@ -1175,7 +1175,7 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
-    debugger;
+    // debugger;
 						console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];
