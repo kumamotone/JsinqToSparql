@@ -1175,8 +1175,8 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
-    // debugger;
-						console.log("transforming: from select null");
+            // debugger;
+						// console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];
 						if (match[1] - match[0] > 1) {
@@ -1203,8 +1203,8 @@
 				{
 					pattern: ['from', 'from', 'select', null],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from from select null");
+            // debugger;
+						// console.log("transforming: from from select null");
 						var firstFromClause = root[match[0]][1];
 						var secondFromClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];
@@ -1238,8 +1238,8 @@
 				{
 					pattern: ['from', 'from'],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from from");
+            // debugger;
+						// console.log("transforming: from from");
 						var firstFromClause = root[match[0]][1];
 						var secondFromClause = root[match[1]][1];
 						root.splice(match[0], 1, [
@@ -1270,8 +1270,8 @@
 				{
 					pattern: ['from', 'let'],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from let");
+            // debugger;
+						// console.log("transforming: from let");
 						var fromClause = root[match[0]][1];
 						var letClause = root[match[1]][1];
 						root.splice(match[0], 1, [
@@ -1297,8 +1297,8 @@
 				{
 					pattern: ['from', 'where'],
 					transformer: function(root, match) {
-    // debugger;
-						console.log("transforming: from where");
+            // debugger;
+						// console.log("transforming: from where");
             var fromClause = root[match[0]][1];
 						var whereClause = root[match[1]][1];
 						root.splice(match[1], 1, [
@@ -1315,8 +1315,8 @@
 				{
 					pattern: ['from', 'join', 'select', null],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from join select null");
+            // debugger;
+						// console.log("transforming: from join select null");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];												
@@ -1354,8 +1354,8 @@
 				{
 					pattern: ['from', 'join'],
 					transformer: function(root, match) {
-    // debugger;
-						console.log("transforming: from join");
+            // debugger;
+						// console.log("transforming: from join");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						// Exclude join-intos
@@ -1390,8 +1390,8 @@
 				{
 					pattern: ['from', 'join', 'select', null],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from join select null");
+            // debugger;
+						// console.log("transforming: from join select null");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						var selectClause = root[match[2]][1];
@@ -1428,8 +1428,8 @@
 				{
 					pattern: ['from', 'join'],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from join");
+            // debugger;
+						// console.log("transforming: from join");
 						var fromClause = root[match[0]][1];
 						var joinClause = root[match[1]][1];
 						
@@ -1465,8 +1465,8 @@
 				{
 					pattern: ['from', 'orderby'],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from orderby");
+            // debugger;
+						// console.log("transforming: from orderby");
 						var fromClause = root[match[0]][1];
 						var orderbyClause = root[match[1]][1];
 						var orderingPostfix = '';
@@ -1501,8 +1501,8 @@
 				{
 					pattern: ['from', 'select', null],
 					transformer: function(root, match) {
-    // debugger;
-						console.log("transforming: from select null");
+            // debugger;
+						// console.log("transforming: from select null");
 						var fromClause = root[match[0]][1];
 						var selectClause = root[match[1]][1];					
 						root.splice(match[0], 1, [
@@ -1528,8 +1528,8 @@
 				{
 					pattern: ['from', 'group', null],
 					transformer: function(root, match) {
-    debugger;
-						console.log("transforming: from group null");
+            // debugger;
+						// console.log("transforming: from group null");
 						var fromClause = root[match[0]][1];
 						var groupClause = root[match[1]][1];					
 						root.splice(match[0], 1, [
