@@ -1763,6 +1763,8 @@
     var queryParameters = [];
     var queryFunction = null;
     try {
+      this.viewnames = query.match(/(\w+) in \$(\w+)/g);
+
       var x = parseQuery(query);
       var y = compileQuery(x);
       queryFunction = new Function('_$qp', 
@@ -1860,28 +1862,32 @@
         jsonschema: Object,
         endpoint: String
       });
-
+      
+      var callsv = function(hoge, callback) {
+        ViewDef.find({viewname: hoge[0]}, function(err,docs) {
+            _setValue(hoge[2], hoge[0], docs[0].sparql, docs[0].endpoint, callback);
+        });
+      }
+      
+      var fugafuga = function(element, index, array) {
+          var hoge = _this.viewnames[index].split(" ");
+          hoge[2] = hoge[2].replace("\$","");
+          callsv(hoge, this);
+      };
+      
+      var findViews = function(callback) {
+        _this.viewnames.forEach(fugafuga, callback);
+      }
+      
       db.on('error', console.error.bind(console, 'connection error:'));
       db.once('open', function () {
-
-      ViewDef.find({}, function(err, docs) {
-        console.log(docs);
-        _this.docs = docs;
-          for(var i = 0; i < docs.length; i++) {
-            if(docs[i].viewname == "Product") {
-              _setValue(0, "product", docs[i].sparql, docs[i].endpoint);
-            } else if (docs[i].viewname == "Feature"){
-              _setValue(1, "feature", docs[i].sparql, docs[i].endpoint);
-            } else if (docs[i].viewname == "ProductType"){
-              _setValue(2, "producttype", docs[i].sparql, docs[i].endpoint);
-            }
-          }
+        findViews(function() {
           db.close();
         });
       });
 
       var count = 0;
-      var _setValue = function (index, vname, viewdef, endpoint) {
+      var _setValue = function (index, vname, viewdef, endpoint, dbcallback) {
         //console.log("wheres----------------------->");
         //console.log(wheres);
         //console.log("selects----------------------->");
@@ -1994,7 +2000,7 @@
           
           console.timeEnd('request'+vname);
           count++;
-          if (count == _this.docs.length) {
+          if (count == _this.viewnames.length) {
             console.time('format');
             var result = query.execute();
             var enumerator = result.getEnumerator();
@@ -2015,6 +2021,7 @@
             }
             // console.log("valuesObj"+JSON.stringify(valuesObj));
             callback(valuesObj);
+            dbcallback();
           }
         });
       } 

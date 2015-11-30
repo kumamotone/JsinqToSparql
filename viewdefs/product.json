@@ -1,5 +1,5 @@
 {
-  "viewname" : "Product",
+  "viewname" : "product",
   "sparql": "DEFINE get:refresh \"0\" DEFINE get:soft \"replace\" PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT * WHERE { ?prdct rdf:type bsbm:Product . ?prdct rdfs:label ?prdctlbl . ?prdct bsbm:productFeature ?prdctft . ?prdct rdf:type ?ptype . ?prdct bsbm:productPropertyNumeric1 ?value1 . ?prdct bsbm:productPropertyNumeric2 ?value2 . ?prdct bsbm:productPropertyTextual1 ?text1 . ?prdct bsbm:productPropertyTextual2 ?text2 . ?prdct bsbm:productPropertyTextual3 ?text3 . ?prdct dc:date ?pdate . } ",
   "jsonschema": { "type":"object", "properties":{
     "results": {
