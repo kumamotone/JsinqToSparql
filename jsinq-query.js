@@ -2004,23 +2004,16 @@
             console.time('format');
             var result = query.execute();
             var enumerator = result.getEnumerator();
-            console.log(JSON.stringify(enumerator));
+            var retval = [];
             while (enumerator.moveNext()) {
                 var name = enumerator.current();
-                var valuesObj = {};
-                // console.log("result----->");
-                name.forEach(function (v, i) {
-                    // console.log("--------------------------------->"); 
-                    // console.log(valuesObj);
-                    // この下の一行がないと動きません
-                    valuesObj[_this.selectKeys[i]] = v;
-                    // valuesObj[_this.selectKeys[i]] = v;
-                    // console.log(_this.selectKeys[i]+"     "+ v);
+                var tuple = [];
+                name.forEach(function (element, index) {
+                    tuple.push([_this.selectKeys[index] , element ]);
                 });
-                // console.log("<-------result");
+                retval.push(tuple);
             }
-            // console.log("valuesObj"+JSON.stringify(valuesObj));
-            callback(valuesObj);
+            callback(retval);
             dbcallback();
           }
         });

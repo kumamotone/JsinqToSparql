@@ -16,11 +16,9 @@ var querystr = ' \
 console.log("LINQ Query:" + querystr);
 var query = new jsinq.Query(querystr);
 query.executeQuery(query,
-function (values) {
+function (retval) {
   //console.log("Results:");
-  for (var key in values) {
-    console.log(key + ': ' + values[key]);
-  }
+  console.log(JSON.stringify(retval));
   console.timeEnd('format');
   // console.timeEnd('timer');
 });
