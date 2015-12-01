@@ -1968,17 +1968,6 @@
         var sendQuery = temp + generator.stringify(parsedQuery)
         console.log("===== ビュー " + vname + "(" + endpoint + ") に以下のクエリを送信しています... =====");
         console.log(sendQuery + "\n");
-
-        // console.log(parsedQuery); 
-        // console.log("gifai------------------->" + JSON.stringify(parsedQuery)); 
-
-        // qp ごとに sparqlclient.query(nank).execute(function() ),.. をする
-
-        // todo sparql クライアントに一斉に投げる（非同期処理)
-        // クエリ実行
-        // sparqlClient.query(実行するSPARQL文).execute(function(arg0, arg1) {});
-        // arg0 ... error 用変数
-        // arg1 ... 実行結果
         console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
         console.time('ビュークエリ ' + vname + ' の実行時間');
         sparqlClient.query(sendQuery).execute(function(error, ret) {
