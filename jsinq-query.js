@@ -1985,6 +1985,7 @@
           
           console.timeEnd('ビュークエリ ' + vname + ' の実行時間');
           count++;
+          var tuplecount = 0;
           if (count == _this.viewnames.length) {
             console.time('SPARQLエンドポイントの返り値の処理の時間');
             var result = query.execute();
@@ -1997,8 +1998,10 @@
                     tuple.push([_this.selectKeys[index] , element ]);
                 });
                 retval.push(tuple);
+                tuplecount++;
             }
             callback(retval);
+            console.log('outputed ' + tuplecount + ' tuples.');
             dbcallback();
           }
         });
