@@ -1972,6 +1972,7 @@
         console.time('ビュークエリ ' + vname + ' の実行時間');
         
         var fs = require('fs');
+        var t = 0;
         sparqlClient.query(sendQuery).execute(function(error, ret) {
           var bindings = ret.results.bindings;
           var values = bindings.map(function(binding) {
@@ -1979,13 +1980,15 @@
               for (var k in binding) {
                   s[k] = binding[k].value;
               }
+              t++;
               return s;
           });
           
           // 各 SPARQL エンドポイントの返り値を見る
           fs.writeFile('outputs/tmp_'+ vname +'.json', JSON.stringify(values));
-          console.log('debug: outputs/tmp_'+ vname +'.json にビュークエリの実行結果を保存しました．');
+          console.log('debug: outputs/tmp_'+ vname +'.json にビュークエリの実行結果を保存しました． (' + t + ' tuples)');
           query.setValue(index, new jsinq.Enumerable(values));
+          
           /// console.log(index.toString());console.log(values);
           
           console.timeEnd('ビュークエリ ' + vname + ' の実行時間');
