@@ -1970,6 +1970,8 @@
         console.log(sendQuery + "\n");
         console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
         console.time('ビュークエリ ' + vname + ' の実行時間');
+        
+        var fs = require('fs');
         sparqlClient.query(sendQuery).execute(function(error, ret) {
           var bindings = ret.results.bindings;
           var values = bindings.map(function(binding) {
@@ -1977,9 +1979,12 @@
               for (var k in binding) {
                   s[k] = binding[k].value;
               }
-              // console.log(JSON.stringify(s));
               return s;
           });
+          
+          // 各 SPARQL エンドポイントの返り値を見る
+          fs.writeFile('outputs/tmp_'+ vname +'.json', JSON.stringify(values));
+          console.log('debug: outputs/tmp_'+ vname +'.json にビュークエリの実行結果を保存しました．');
           query.setValue(index, new jsinq.Enumerable(values));
           /// console.log(index.toString());console.log(values);
           
