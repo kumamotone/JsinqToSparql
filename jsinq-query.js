@@ -1780,25 +1780,44 @@
       console.log("===== Compiled Query Expression(Tree) =====");
       console.log(JSON.stringify(x) + "\n");
 
+      this.selectedkeys = [];
       // select文でとってくるカラムの名前をおぼえる
       for (var i = 0; i < x.parsed.length; i++) {
-          if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
-          var selectStr = x.parsed[i][1][1].replace(/\s*/g, '');
-          var selects = selectStr.match(/return\[(.*)\]/);
-          if (!selects) { continue; }
-          this.selectKeys = selects[1].split(/,/);
-          //console.log("---selectKeys--------");
-          //console.log(this.selectKeys);
+        if (! /\.select/.test(x.parsed[i][1][0])) { continue; }
+        var selectStr = x.parsed[i][1][1].replace(/\s*/g, '');
+        var selects = selectStr.match(/return\[(.*)\]/);
+        if (!selects) { continue; }
+        var splitted = selects[1].split(/,/);
+        var that = this;
+        var hoge = function(element,index,array) {
+          that.selectedkeys.push(element.match(/(\w+)\.(\w+)/));          
+        };
+        splitted.forEach(hoge);
+        //console.log("---selectKeys--------");
+        //console.log(this.selectKeys);
       }
 
       // join 句で指定されているキーをおぼえる
-	  this.outerkeys = [];
-	  this.innerkeys = [];
-	  
+	   this.outerkeys = [];
+	   this.innerkeys = [];
+    
       for (var i = 0; i < x.parsed.length; i++) {
-          if (! /\.join/.test(x.parsed[i][1][0])) { continue; }
-		  this.outerkeys.push(x.parsed[i][1][3].match(/return (\w+) \. (\w+)/));
-		  this.innerkeys.push(x.parsed[i][1][5].match(/return (\w+) \. (\w+)/));
+        if (! /\.join/.test(x.parsed[i][1][0])) { continue; }
+	      this.outerkeys.push(x.parsed[i][1][3].match(/return (\w+) \. (\w+)/));
+	      this.innerkeys.push(x.parsed[i][1][5].match(/return (\w+) \. (\w+)/));
+      }
+      
+      for (var i = 0; i < x.parsed.length; i++) {
+        if (! /\.join/.test(x.parsed[i][1][0])) { continue; }
+        var joinStr = x.parsed[i][1][7].replace(/\s*/g, '');
+        var joins = joinStr.match(/return\[(.*)\]/);
+        if (!joins) { continue; }
+        var splitted = joins[1].split(/,/);
+        var that = this;
+        var hoge = function(element,index,array) {
+          that.selectedkeys.push(element.match(/(\w+)\.(\w+)/));          
+        };
+        splitted.forEach(hoge);
       }
 
     } catch (e) {			
@@ -1911,22 +1930,18 @@
         
         // console.log(_this.selectKeys);
         
-        // select 句を解釈して SPARQL クエリにプッシュダウン
         parsedQuery.variables = []
-        for (var idx in _this.selectKeys) {
-          var aaaa = _this.selectKeys[idx].split(".");
-          if (aaaa[0] == vname) {
-            parsedQuery.variables.push("?"+aaaa[1]);
-          }
-        }
-    
+         
         function pushkey (value, index, array) {
         // outerkey と innerkey が，select文に含まれていなければプッシュダウン
           if(value[1] == vname && parsedQuery.variables.indexOf("?"+value[2]) === -1) {
           parsedQuery.variables.push("?"+ value[2]);
           }
         }
-            
+        
+        // select 句の変数を SPARQL クエリにプッシュダウン
+        _this.selectedkeys.forEach(pushkey);
+        // join 句の変数を SPARQL クエリにプッシュダウン
         _this.innerkeys.forEach(pushkey);
         _this.outerkeys.forEach(pushkey);
         
