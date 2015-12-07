@@ -2012,15 +2012,12 @@
           if (count == _this.viewnames.length) {
             console.time('SPARQLエンドポイントの返り値の処理の時間');
             var result = query.execute();
+            
             var enumerator = result.getEnumerator();
             var retval = [];
             while (enumerator.moveNext()) {
                 var name = enumerator.current();
-                var tuple = [];
-                name.forEach(function (element, index) {
-                    tuple.push([_this.selectKeys[index] , element ]);
-                });
-                retval.push(tuple);
+                retval.push(name);
                 tuplecount++;
             }
             callback(retval);
