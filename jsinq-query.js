@@ -1958,8 +1958,38 @@
         
         // parsedQuery.variables = [selecting];
 
+        var triples = parsedQuery.where[0].triples;
+        parsedQuery.where[0].triples = [];
+        
+        // triples を検索して，合致するものだけ push
+        // console.log(JSON.stringify(triples));
+
+        for (var index in triples) {
+          var triple = triples[index];
+          // var hatenao = triple.object.match(/\?(\w+)/);
+          // var hatenap = triple.predicate.match(/\?(\w+)/);
+          // var hatenas = triple.subject.match(/\?(\w+)/);
+          var hatenas = JSON.stringify(triple).match(/(\?\w+)/g);
+          
+          if (hatenas.length === 1) {
+            if (parsedQuery.variables.indexOf(hatenas[0]) !== -1) {
+              parsedQuery.where[0].triples.push(triple);
+            }
+          } else if (hatenas.length === 2) {
+            if (parsedQuery.variables.indexOf(hatenas[0]) !== -1 &&
+                parsedQuery.variables.indexOf(hatenas[1]) !== -1 ) {
+                  parsedQuery.where[0].triples.push(triple);
+                }
+          } else {
+              console.log("hatenas.length is bigger than 2");
+          }
+          // console.log(JSON.stringify(hatenas));
+        }
+        
+        // parsedQuery.distinct = true;
+
         for (var idx in wheres) {
-            vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
+            var vn = wheres[idx].substring(0, wheres[idx].indexOf(" \."));
             if (vn == vname) {
               cond = wheres[idx].substring(wheres[idx].indexOf(" \.")+3, wheres[idx].length );
               if (cond.indexOf(" == ") !== -1) { 
