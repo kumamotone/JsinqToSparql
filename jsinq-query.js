@@ -1983,7 +1983,7 @@
         var sendQuery = temp + generator.stringify(parsedQuery)
         console.log("===== ビュー " + vname + "(" + endpoint + ") に以下のクエリを送信しています... =====");
         console.log(sendQuery + "\n");
-        console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
+        console.timeEnd('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
         console.time('ビュークエリ ' + vname + ' の実行時間');
         
         var fs = require('fs');
