@@ -25,7 +25,9 @@ var querystr = ' \
   on product.prdctft equals feature.ft \
   join producttype in $2  \
   on product.ptype equals producttype.pt \
-  select [product.prdct, product.prdctlbl, product.value1, product.ptype, feature.ft, producttype.pt, producttype.ptlbl ]  \
+  where product.value1 < 200 \
+  select [product.prdct, product.prdctlbl, product.value1, product.ptype, product.ptct, product.pdate, \
+    feature.ft, feature.ftlbl, producttype.pt, producttype.ptlbl, producttype.ptdate ]  \
 ';
 
 
