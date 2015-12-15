@@ -1,3 +1,4 @@
+console.time('トータル');
 console.time('アプリを起動してからSPARQLクエリを実行するまでの時間(木のパース等にかかった時間)');
 
 require('./jsinq');
@@ -44,4 +45,5 @@ query.executeQuery(query,
 function (retval) {
   fs.writeFile('outputs/outputs.json', JSON.stringify(retval));
   console.timeEnd('SPARQLエンドポイントの返り値の処理の時間');
+  console.timeEnd('トータル');
 });
