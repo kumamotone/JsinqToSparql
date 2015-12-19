@@ -2008,13 +2008,13 @@
           
           console.timeEnd('ビュークエリ ' + vname + ' の実行時間');
           count++;
-          var tuplecount = 0;
           if (count == _this.viewnames.length) {
             console.time('SPARQLエンドポイントの返り値の処理の時間');
             var result = query.execute();
             
             var enumerator = result.getEnumerator();
             var retval = [];
+            var tuplecount = 0;
             while (enumerator.moveNext()) {
                 var name = enumerator.current();
                 retval.push(name);
