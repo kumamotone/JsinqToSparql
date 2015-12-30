@@ -1,0 +1,15 @@
+{
+  "viewname" : "offer",
+  "sparql": "DEFINE get:refresh \"0\" DEFINE get:soft \"replace\" PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/> PREFIX dc: <http://purl.org/dc/elements/1.1/>  SELECT * WHERE { ?of rdf:type bsbm:Offer . ?of bsbm:product ?ofprdct . ?of  bsbm:vendor ?ofvndr . ?of dc:date ?ofdate .  ?of bsbm:deliveryDays ?ofdays . }",
+  "jsonschema": { "type":"object", "properties":{
+    "results": {
+    "type":"array", "items":{
+    "type":"object", "properties":{
+    "?of": { "type":"string" },
+    "?ofprdct": { "type":"string" },
+    "?ofvndr":{"type":"string"},
+    "?ofdate": { "type":"string" },
+    "?ofdays": { "type":"string" }
+    }}}}},
+  "endpoint": "http://130.158.76.22:8890/sparql"
+}
